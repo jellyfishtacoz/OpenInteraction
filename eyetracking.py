@@ -1,7 +1,7 @@
 import cv2
 import pyautogui
 from eyetrax import GazeEstimator
-from overlay import Overlay
+from overlay import CircleOverlay, BoundaryOverlay
 from PyQt5.QtWidgets import QApplication
 import sys
 from eyetrax.filters import KDESmoother
@@ -19,8 +19,11 @@ handler_map = {
 }
 
 app = QApplication(sys.argv)
-overlay = Overlay()
-if eye_tracking: overlay.show()
+c_overlay = CircleOverlay()
+b_overlay = BoundaryOverlay(0.4)
+if eye_tracking:
+    c_overlay.show()
+    b_overlay.show()
 
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model
@@ -78,8 +81,8 @@ while True:
                 handler(smoothed_x, smoothed_y)
 
             # update gaze position
-            overlay.gaze_x = int(smoothed_x)
-            overlay.gaze_y = int(smoothed_y)
+            c_overlay.gaze_x = int(smoothed_x)
+            c_overlay.gaze_y = int(smoothed_y)
                 
         else:
             if not blink_state :
