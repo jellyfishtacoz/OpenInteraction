@@ -6,6 +6,7 @@ from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
 from eyetrax.filters import KDESmoother
+from trackinghandlers import move_cursor_handler
 
 app = QApplication(sys.argv)
 overlay = Overlay()
@@ -16,9 +17,9 @@ estimator.load_model("gaze_model.pkl")  # if you saved a model
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 smoother = KDESmoother(SCREEN_W, SCREEN_H)
-smoother.tune(estimator, camera_index=0)
 
-# Latest single-file JSON for consumers (atomic writes)
+# handler
+handler = move_cursor_handler()
 
 cap = cv2.VideoCapture(0)
 while True:
@@ -26,11 +27,13 @@ while True:
     features, blink = estimator.extract_features(frame)
     if features is not None and not blink:
         x, y = estimator.predict([features])[0]
-        print(f"Gaze: ({x:.0f}, {y:.0f})")
+        # print(f"Gaze: ({x:.0f}, {y:.0f})")
 
         smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
-        #Send coords to JSON:
+        # do action
+        handler(smoothed_x, smoothed_y)
+
         write_latest_json(smoothed_x, smoothed_y)
 
         # update gaze position

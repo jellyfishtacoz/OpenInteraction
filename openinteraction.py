@@ -17,7 +17,7 @@ button = tk.Button(root, text="Click me", command=on_click)
 button.pack()
 
 # Button
-label = tk.Label(root, text="Press for eyetracking")
+label = tk.Label(root, text="Press for cursor")
 label.pack(pady=20)
 
 def on_click():
