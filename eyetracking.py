@@ -36,8 +36,6 @@ while True:
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
         overlay.gaze_y = int(smoothed_y)
-    else :
-        write_latest_json(0,0,True)
 
     # Quit with 'q' -- doesnt work
     if cv2.waitKey(1) & 0xFF == ord('q'):
