@@ -31,9 +31,6 @@ while True:
 
         smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
-        # Move mouse
-        pyautogui.moveTo(smoothed_x, smoothed_y)
-
         #Send coords to JSON:
         write_latest_json(x, y, LATEST_JSON)
 
