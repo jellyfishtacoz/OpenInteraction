@@ -15,7 +15,7 @@ pressed_keys = set()
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 
-DIST_THRESHOLD = 100  # fraction of screen; used for left/right/up/down
+DIST_THRESHOLD = 250  # distance on screen; used for left/right/up/down
 
 LEFT_THRESHOLD = SCREEN_W / 2 - DIST_THRESHOLD
 RIGHT_THRESHOLD = SCREEN_W / 2 + DIST_THRESHOLD
