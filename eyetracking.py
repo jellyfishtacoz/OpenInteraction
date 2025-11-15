@@ -9,7 +9,7 @@ from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_han
 from pynput import keyboard
 import time
 
-settings = ["press_key"]  # could be loaded from a config
+settings = []  # could be loaded from a config
 eye_tracking = True
 head_tracking = False
 
@@ -64,8 +64,7 @@ while True:
         if results.multi_face_landmarks:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
-                if enabled:
-                    print(face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                print(face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
 
     if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)
