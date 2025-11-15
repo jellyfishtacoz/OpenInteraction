@@ -9,7 +9,7 @@ from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_han
 from pynput import keyboard
 import time
 
-settings = ["move_cursor"]  # could be loaded from a config
+settings = ["press_key"]  # could be loaded from a config
 eye_tracking = True
 head_tracking = False
 
