@@ -21,7 +21,7 @@ label = tk.Label(root, text="Press for eyetracking")
 label.pack(pady=20)
 
 def on_click():
-    subprocess.run([r".venv\Scripts\python.exe", "eyetracking.py"])
+    subprocess.run([r".venv\Scripts\python.exe", "eyecursor.py"])
 
 button = tk.Button(root, text="Click me", command=on_click)
 button.pack()
