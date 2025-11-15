@@ -1,30 +1,44 @@
 import tkinter as tk
 import subprocess
 
-# Create window
+process = None  # global variable to store subprocess
+
+def start_calibration():
+    global process
+    if process is None or process.poll() is not None:  # not running
+        process = subprocess.Popen([r".venv\Scripts\python.exe", "calibrate.py"])
+    else:
+        print("Calibration already running")
+
+def start_cursor():
+    global process
+    if process is None or process.poll() is not None:
+        process = subprocess.Popen([r".venv\Scripts\python.exe", "eyetracking.py"])
+    else:
+        print("Cursor tracking already running")
+
+def stop_process(event=None):
+    global process
+    if process is not None and process.poll() is None:  # still running
+        process.terminate()
+        print("Process terminated")
+        process = None
+
 root = tk.Tk()
 root.title("openinteraction")
-root.geometry("600x400")  # width x height
+root.geometry("600x400")
 
-# Button
-label = tk.Label(root, text="Press for calibration")
-label.pack(pady=20)
+root.bind("<Escape>", stop_process)
 
-def on_click():
-    subprocess.run([r".venv\Scripts\python.exe", "calibrate.py"])
+# Calibration button
+tk.Label(root, text="Press for calibration").pack(pady=20)
+tk.Button(root, text="Start Calibration", command=start_calibration).pack()
 
-button = tk.Button(root, text="Click me", command=on_click)
-button.pack()
+# Cursor button
+tk.Label(root, text="Press for cursor").pack(pady=20)
+tk.Button(root, text="Start Cursor", command=start_cursor).pack()
 
-# Button
-label = tk.Label(root, text="Press for cursor")
-label.pack(pady=20)
+# Bind Esc to stop subprocess
+root.bind("<Escape>", stop_process)
 
-def on_click():
-    subprocess.run([r".venv\Scripts\python.exe", "eyetracking.py"])
-
-button = tk.Button(root, text="Click me", command=on_click)
-button.pack()
-
-# Run the app
 root.mainloop()

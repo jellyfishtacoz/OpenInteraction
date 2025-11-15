@@ -33,7 +33,13 @@ def on_press(key):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-handler = gaze_to_key_handler
+settings = ["press_key"]  # could be loaded from a config
+handler_map = {
+    "move_cursor": move_cursor_handler,
+    "press_key": gaze_to_key_handler,
+}
+
+active_handlers = [handler_map[s] for s in settings]
 
 cap = cv2.VideoCapture(0)
 while True:
@@ -47,7 +53,8 @@ while True:
 
         # do action
         if enabled:
-            handler(smoothed_x, smoothed_y)
+            for handler in active_handlers:
+                handler(smoothed_x, smoothed_y)
 
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
