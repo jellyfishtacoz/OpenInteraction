@@ -10,8 +10,8 @@ from pynput import keyboard
 import time
 
 settings = ["move_cursor"]  # could be loaded from a config
-eye_tracking = False
-head_tracking = True
+eye_tracking = True
+head_tracking = False
 
 handler_map = {
     "move_cursor": move_cursor_handler,
