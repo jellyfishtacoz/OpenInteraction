@@ -67,13 +67,9 @@ while True:
     if eye_tracking:
         features, blink = estimator.extract_features(frame)
         if features is not None and not blink:
+            blink_state = False
             x, y = estimator.predict([features])[0]
             # print(f"Gaze: ({x:.0f}, {y:.0f})")
-    features, blink = estimator.extract_features(frame)
-    if features is not None and not blink:
-        blink_state = False
-        x, y = estimator.predict([features])[0]
-        # print(f"Gaze: ({x:.0f}, {y:.0f})")
 
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
@@ -85,25 +81,23 @@ while True:
             # update gaze position
             overlay.gaze_x = int(smoothed_x)
             overlay.gaze_y = int(smoothed_y)
-        # update gaze position
-        overlay.gaze_x = int(smoothed_x)
-        overlay.gaze_y = int(smoothed_y)
-    else :
-        if not blink_state :
-            # Blink detected
-            blink_state = True
-            current_time = time.time()
-            if current_time - last_blink_time < double_blink_threshold:
-                blink_count += 1
-            else:
-                blink_count = 1  # reset count if too long
+            
+        else :
+            if not blink_state :
+                # Blink detected
+                blink_state = True
+                current_time = time.time()
+                if current_time - last_blink_time < double_blink_threshold:
+                    blink_count += 1
+                else:
+                    blink_count = 1  # reset count if too long
 
-            last_blink_time = current_time
+                last_blink_time = current_time
 
-            if blink_count == 2:
-                print("Double blink detected! Clicking mouse...")
-                blink_handler()
-                blink_count = 0  # reset after double blink
+                if blink_count == 2:
+                    print("Double blink detected! Clicking mouse...")
+                    blink_handler()
+                    blink_count = 0  # reset after double blink
 
     # Quit with 'q' -- doesnt work
     if cv2.waitKey(1) & 0xFF == ord('q'):
