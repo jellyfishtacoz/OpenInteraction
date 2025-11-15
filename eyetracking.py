@@ -7,6 +7,7 @@ import sys
 from eyetrax.filters import KDESmoother
 from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler
 from pynput import keyboard
+import time
 
 settings = ["move_cursor"]  # could be loaded from a config
 eye_tracking = False
@@ -16,7 +17,6 @@ handler_map = {
     "move_cursor": move_cursor_handler,
     "press_key": gaze_to_key_handler,
 }
-import time
 
 app = QApplication(sys.argv)
 overlay = Overlay()
@@ -76,16 +76,16 @@ while True:
         x, y = estimator.predict([features])[0]
         # print(f"Gaze: ({x:.0f}, {y:.0f})")
 
-            smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
+        smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
-            # do action
-            if enabled:
-                for handler in active_handlers:
-                    handler(smoothed_x, smoothed_y)
+        # do action
+        if enabled:
+            for handler in active_handlers:
+                handler(smoothed_x, smoothed_y)
 
-            # update gaze position
-            overlay.gaze_x = int(smoothed_x)
-            overlay.gaze_y = int(smoothed_y)
+        # update gaze position
+        overlay.gaze_x = int(smoothed_x)
+        overlay.gaze_y = int(smoothed_y)
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
         overlay.gaze_y = int(smoothed_y)
