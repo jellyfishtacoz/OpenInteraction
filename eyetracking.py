@@ -5,7 +5,6 @@ from JSONwriter import write_latest_json
 from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
-
 from eyetrax.filters import KDESmoother
 
 app = QApplication(sys.argv)
@@ -17,6 +16,7 @@ estimator.load_model("gaze_model.pkl")  # if you saved a model
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 smoother = KDESmoother(SCREEN_W, SCREEN_H)
+smoother.tune(estimator, camera_index=0)
 
 # Latest single-file JSON for consumers (atomic writes)
 LATEST_JSON = "latest_gaze.json"
