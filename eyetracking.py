@@ -6,6 +6,8 @@ from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
 
+from eyetrax.filters import KDESmoother
+
 app = QApplication(sys.argv)
 overlay = Overlay()
 overlay.show()
@@ -13,8 +15,8 @@ overlay.show()
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model
 
-# Get screen size for mapping
 SCREEN_W, SCREEN_H = pyautogui.size()
+smoother = KDESmoother(SCREEN_W, SCREEN_H)
 
 # Latest single-file JSON for consumers (atomic writes)
 LATEST_JSON = "latest_gaze.json"
@@ -27,18 +29,17 @@ while True:
         x, y = estimator.predict([features])[0]
         print(f"Gaze: ({x:.0f}, {y:.0f})")
 
-        # KDE smoothing
-        # smooth_x, smooth_y = kde_smooth_screen(history, sigma=10)
+        smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
         # Move mouse
-        pyautogui.moveTo(x, y)
+        pyautogui.moveTo(smoothed_x, smoothed_y)
 
         #Send coords to JSON:
         write_latest_json(x, y, LATEST_JSON)
 
         # update gaze position
-        overlay.gaze_x = int(x)
-        overlay.gaze_y = int(y)
+        overlay.gaze_x = int(smoothed_x)
+        overlay.gaze_y = int(smoothed_y)
 
     # Quit with 'q' -- doesnt work
     if cv2.waitKey(1) & 0xFF == ord('q'):
