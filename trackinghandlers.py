@@ -55,6 +55,5 @@ def gaze_to_key_handler(x, y):
     pressed_keys = keys_to_press
     print(pressed_keys)
 
-def blink_handler(blink) :
-    if blink :
-        pyautogui.leftClick()
+def blink_handler() :
+    pyautogui.click()
