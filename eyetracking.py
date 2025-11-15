@@ -60,8 +60,7 @@ while True:
     if eye_tracking:
         features, blink = estimator.extract_features(frame)
         if features is not None and not blink:
-            # x, y = estimator.predict([features])[0]
-            x, y = (100,100)
+            x, y = estimator.predict([features])[0]
             # print(f"Gaze: ({x:.0f}, {y:.0f})")
 
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
