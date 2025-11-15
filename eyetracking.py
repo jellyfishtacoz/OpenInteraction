@@ -1,7 +1,7 @@
 import cv2
 import pyautogui
 from eyetrax import GazeEstimator
-
+from JSONwriter import write_latest_json
 from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
@@ -16,6 +16,9 @@ estimator.load_model("gaze_model.pkl")  # if you saved a model
 # Get screen size for mapping
 SCREEN_W, SCREEN_H = pyautogui.size()
 
+# Latest single-file JSON for consumers (atomic writes)
+LATEST_JSON = "latest_gaze.json"
+
 cap = cv2.VideoCapture(0)
 while True:
     ret, frame = cap.read()
@@ -29,6 +32,9 @@ while True:
 
         # Move mouse
         pyautogui.moveTo(x, y)
+
+        #Send coords to JSON:
+        write_latest_json(x, y, LATEST_JSON)
 
         # update gaze position
         overlay.gaze_x = int(x)
