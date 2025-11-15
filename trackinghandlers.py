@@ -12,12 +12,12 @@ pressed_keys = set()
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 
-EDGE_THRESHOLD = 0.4  # fraction of screen; used for left/right/up/down
+DIST_THRESHOLD = 75  # fraction of screen; used for left/right/up/down
 
-LEFT_THRESHOLD = EDGE_THRESHOLD
-RIGHT_THRESHOLD = 1 - EDGE_THRESHOLD
-UP_THRESHOLD = EDGE_THRESHOLD
-DOWN_THRESHOLD = 1 - EDGE_THRESHOLD
+LEFT_THRESHOLD = SCREEN_W / 2 - DIST_THRESHOLD
+RIGHT_THRESHOLD = SCREEN_W / 2 + DIST_THRESHOLD
+UP_THRESHOLD = SCREEN_H / 2 - DIST_THRESHOLD
+DOWN_THRESHOLD = SCREEN_H / 2 + DIST_THRESHOLD
 
 KEY_MAPPING = {
     "left": 'a',
@@ -28,21 +28,19 @@ KEY_MAPPING = {
 
 def gaze_to_key_handler(x, y):
     global pressed_keys
-    x_frac = x / SCREEN_W
-    y_frac = y / SCREEN_H
 
     keys_to_press = set()
 
     # horizontal
-    if x_frac < LEFT_THRESHOLD:
+    if x < LEFT_THRESHOLD:
         keys_to_press.add(KEY_MAPPING["left"])
-    elif x_frac > RIGHT_THRESHOLD:
+    elif x > RIGHT_THRESHOLD:
         keys_to_press.add(KEY_MAPPING["right"])
 
     # vertical
-    if y_frac < UP_THRESHOLD:
+    if y < UP_THRESHOLD:
         keys_to_press.add(KEY_MAPPING["up"])
-    elif y_frac > DOWN_THRESHOLD:
+    elif y > DOWN_THRESHOLD:
         keys_to_press.add(KEY_MAPPING["down"])
 
     # Release keys that are no longer active

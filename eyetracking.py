@@ -20,7 +20,7 @@ handler_map = {
 
 app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
-b_overlay = BoundaryOverlay(0.4)
+b_overlay = BoundaryOverlay(75)
 if eye_tracking:
     c_overlay.show()
     b_overlay.show()
