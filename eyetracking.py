@@ -36,7 +36,7 @@ def on_press(key):
     try:
         if key.char == 't':  # Press 't' to toggle
             enabled = not enabled
-            print(f"Eye tracking enabled: {enabled}")
+            print(f"Tracking enabled: {enabled}")
     except AttributeError:
         pass
 
@@ -71,18 +71,18 @@ while True:
             x, y = estimator.predict([features])[0]
             # print(f"Gaze: ({x:.0f}, {y:.0f})")
 
-        smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
+            smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
-        # do action
-        if enabled:
-            for handler in active_handlers:
-                handler(smoothed_x, smoothed_y)
+            # do action
+            if enabled:
+                for handler in active_handlers:
+                    handler(smoothed_x, smoothed_y)
 
-            # update gaze position
-            overlay.gaze_x = int(smoothed_x)
-            overlay.gaze_y = int(smoothed_y)
-            
-        else :
+                # update gaze position
+                overlay.gaze_x = int(smoothed_x)
+                overlay.gaze_y = int(smoothed_y)
+                
+        else:
             if not blink_state :
                 # Blink detected
                 blink_state = True
