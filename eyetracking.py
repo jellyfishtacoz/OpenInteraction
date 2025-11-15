@@ -55,7 +55,7 @@ cap = cv2.VideoCapture(0)
 while True:
     ret, frame = cap.read()
 
-    if head_tracking:
+    if head_tracking and enabled:
         face_mesh = estimator.face_mesh
         results = face_mesh.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         if results.multi_face_landmarks:
@@ -64,7 +64,7 @@ while True:
                 if enabled:
                     print(face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
 
-    if eye_tracking:
+    if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)
         if features is not None and not blink:
             blink_state = False
@@ -74,13 +74,12 @@ while True:
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
             # do action
-            if enabled:
-                for handler in active_handlers:
-                    handler(smoothed_x, smoothed_y)
+            for handler in active_handlers:
+                handler(smoothed_x, smoothed_y)
 
-                # update gaze position
-                overlay.gaze_x = int(smoothed_x)
-                overlay.gaze_y = int(smoothed_y)
+            # update gaze position
+            overlay.gaze_x = int(smoothed_x)
+            overlay.gaze_y = int(smoothed_y)
                 
         else:
             if not blink_state :
