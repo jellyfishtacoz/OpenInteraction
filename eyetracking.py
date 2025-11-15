@@ -1,7 +1,7 @@
 import cv2
 import pyautogui
 from eyetrax import GazeEstimator
-from JSONwriter import write_latest_json
+from JSONhandler import write_latest_json
 from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
@@ -19,7 +19,6 @@ SCREEN_W, SCREEN_H = pyautogui.size()
 smoother = KDESmoother(SCREEN_W, SCREEN_H)
 
 # Latest single-file JSON for consumers (atomic writes)
-LATEST_JSON = "latest_gaze.json"
 
 cap = cv2.VideoCapture(0)
 while True:
@@ -35,7 +34,7 @@ while True:
         pyautogui.moveTo(smoothed_x, smoothed_y)
 
         #Send coords to JSON:
-        write_latest_json(x, y, LATEST_JSON)
+        write_latest_json(smoothed_x, smoothed_y)
 
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
