@@ -55,3 +55,34 @@ def gaze_to_key_handler(x, y):
 
 def blink_handler() :
     pyautogui.click()
+
+
+# --- keypress from head
+threshold = 0.2
+
+def head_to_key_handler(rot, rot0):
+    global pressed_keys
+
+    keys_to_press = set()
+
+    # horizontal
+    if (rot.x - rot0.x) > threshold:
+        keys_to_press.add(KEY_MAPPING["left"])
+    elif (rot.x - rot0.x) < threshold:
+        keys_to_press.add(KEY_MAPPING["right"])
+
+    # vertical
+    if (rot.y - rot0.y) > threshold:
+        keys_to_press.add(KEY_MAPPING["up"])
+    elif (rot.y - rot0.y) < threshold:
+        keys_to_press.add(KEY_MAPPING["down"])
+
+    # Release keys that are no longer active
+    for key in pressed_keys - keys_to_press:
+        keyboard.release(key)
+    # Press new keys
+    for key in keys_to_press - pressed_keys:
+        keyboard.press(key)
+
+    pressed_keys = keys_to_press
+    print(pressed_keys)
