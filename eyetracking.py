@@ -31,11 +31,13 @@ while True:
         smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
         #Send coords to JSON:
-        write_latest_json(smoothed_x, smoothed_y)
+        write_latest_json(smoothed_x, smoothed_y, False)
 
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
         overlay.gaze_y = int(smoothed_y)
+    else :
+        write_latest_json(0,0,True)
 
     # Quit with 'q' -- doesnt work
     if cv2.waitKey(1) & 0xFF == ord('q'):
