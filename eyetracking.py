@@ -1,7 +1,6 @@
 import cv2
 import pyautogui
 from eyetrax import GazeEstimator
-from JSONhandler import write_latest_json
 from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
@@ -33,8 +32,6 @@ while True:
 
         # do action
         handler(smoothed_x, smoothed_y)
-
-        write_latest_json(smoothed_x, smoothed_y)
 
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
