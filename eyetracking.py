@@ -5,7 +5,7 @@ from overlay import Overlay
 from PyQt5.QtWidgets import QApplication
 import sys
 from eyetrax.filters import KDESmoother
-from trackinghandlers import move_cursor_handler
+from trackinghandlers import move_cursor_handler, gaze_to_key_handler
 from pynput import keyboard
 
 app = QApplication(sys.argv)
@@ -19,19 +19,21 @@ SCREEN_W, SCREEN_H = pyautogui.size()
 smoother = KDESmoother(SCREEN_W, SCREEN_H)
 
 # toggle
-move_mouse_enabled = True
+enabled = True
 
 def on_press(key):
-    global move_mouse_enabled
+    global enabled
     try:
         if key.char == 't':  # Press 't' to toggle
-            move_mouse_enabled = not move_mouse_enabled
-            print(f"Move mouse enabled: {move_mouse_enabled}")
+            enabled = not enabled
+            print(f"Eye tracking enabled: {enabled}")
     except AttributeError:
         pass
 
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
+
+handler = gaze_to_key_handler
 
 cap = cv2.VideoCapture(0)
 while True:
@@ -44,8 +46,8 @@ while True:
         smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
         # do action
-        if move_mouse_enabled:
-            move_cursor_handler(smoothed_x, smoothed_y)
+        if enabled:
+            handler(smoothed_x, smoothed_y)
 
         # update gaze position
         overlay.gaze_x = int(smoothed_x)
