@@ -140,7 +140,7 @@ def stop_process(event=None):
 
 root = tk.Tk()
 root.title("openinteraction")
-root.geometry("700x600")
+root.geometry("800x700")
 root.bind("<Escape>", stop_process)
 
 load_config()
