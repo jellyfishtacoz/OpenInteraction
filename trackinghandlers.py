@@ -74,8 +74,8 @@ def blink_handler() :
     mouse.release(Button.left)
 
 # --- keypress from head
-threshold_h = config["head_bthresh_h"] * 0.1
-threshold_v = config["head_bthresh_v"] * 0.1
+threshold_h = config["head_bthresh_h"]
+threshold_v = config["head_bthresh_v"]
 
 def head_to_key_handler(rotd):
     global pressed_keys
@@ -97,9 +97,9 @@ def head_to_key_handler(rotd):
         keys_to_press.add(KEY_MAPPING["right"])
 
     # vertical
-    if ydif < -threshold_v:
+    if ydif > threshold_v:
         keys_to_press.add(KEY_MAPPING["up"])
-    elif ydif > threshold_v:
+    elif ydif < -threshold_v:
         keys_to_press.add(KEY_MAPPING["down"])
 
     # Release keys that are no longer active

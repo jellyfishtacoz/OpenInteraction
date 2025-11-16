@@ -99,8 +99,8 @@ class HeadOverlay(QWidget):
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
 
         self.max_length = config["head_overlay_size"]  # how tall the line can get
-        self.threshold_h = config["head_bthresh_h"] * 0.1
-        self.threshold_v = config["head_bthresh_v"] * 0.1
+        self.threshold_h = config["head_bthresh_h"]
+        self.threshold_v = config["head_bthresh_v"]
 
         axismap = {
             "head_yaw": 0,
@@ -135,7 +135,7 @@ class HeadOverlay(QWidget):
 
         scale = self.threshold_v / self.threshold_h
 
-        p.drawLine(cx, cy, cx, cy + offsety)
+        p.drawLine(cx, cy, cx, cy - offsety)
         p.drawLine(cx, cy, cx - offsetx, cy)
 
         p.setPen(penr)

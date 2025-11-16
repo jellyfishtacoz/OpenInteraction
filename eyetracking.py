@@ -7,6 +7,7 @@ import sys
 from eyetrax.filters import KDESmoother
 from trackinghandlers import *
 from pynput import keyboard
+from calculateheadrot import get_head_rotation
 import time
 import json
 
@@ -95,13 +96,13 @@ while True:
         if results.multi_face_landmarks:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
-                rot = (face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                rot = get_head_rotation(face, frame.shape[1], frame.shape[0])
                 if not calibrated:
                     rot0 = rot
                     calibrated = True
                 
                 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
-                print(rotd[2])
+                print(rotd)
 
                 active_head_handler(rotd)
                 h_overlay.rotd = rotd
