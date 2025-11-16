@@ -280,7 +280,7 @@ left.pack(side="left", padx=20, anchor="w")
 middle = tk.Label(footer, text="Press C to recenter")
 middle.place(relx=0.5, rely=0.5, anchor="center")  # or use place to center precisely
 
-right = tk.Label(footer, text="Press T to pause tracking")
+right = tk.Label(footer, text="Press P to pause tracking")
 right.pack(side="right", padx=20, anchor="e")
 
 root.mainloop()
