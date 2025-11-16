@@ -67,7 +67,7 @@ def on_press(key):
     global enabled
     global rot0
     try:
-        if key.char == 't':  # Press 't' to toggle
+        if key.char == 'p':  # Press 'p' to pause
             enabled = not enabled
             print(f"Tracking enabled: {enabled}")
         if key.char == 'c':  # Press 't' to toggle
