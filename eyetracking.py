@@ -101,6 +101,7 @@ while True:
                     calibrated = True
                 
                 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
+                print(rotd[2])
 
                 active_head_handler(rotd)
                 h_overlay.rotd = rotd

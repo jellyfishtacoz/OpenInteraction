@@ -84,9 +84,9 @@ def head_to_key_handler(rotd):
 
     axismap = {
         "head_yaw": 0,
-        "head_tilt": 3,
+        "head_tilt": 2,
     }
-
+    
     xdif = rotd[axismap[config["head_x_input"]]]
     ydif = rotd[1]
 

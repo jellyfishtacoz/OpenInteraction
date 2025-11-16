@@ -102,6 +102,13 @@ class HeadOverlay(QWidget):
         self.threshold_h = config["head_bthresh_h"] * 0.1
         self.threshold_v = config["head_bthresh_v"] * 0.1
 
+        axismap = {
+            "head_yaw": 0,
+            "head_tilt": 2,
+        }
+    
+        self.h_axis = axismap[config["head_x_input"]]
+
         self.rotd = (0,0,0)
 
         self.timer = QTimer()
@@ -124,7 +131,7 @@ class HeadOverlay(QWidget):
         # value = -1 → line fully down
         # value = +1 → line fully up
         offsety = int((self.rotd[1] / self.threshold_h) * self.max_length)
-        offsetx = int((self.rotd[0] / self.threshold_h) * self.max_length)
+        offsetx = int((self.rotd[self.h_axis] / self.threshold_h) * self.max_length)
 
         scale = self.threshold_v / self.threshold_h
 
