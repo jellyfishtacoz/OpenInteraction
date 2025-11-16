@@ -20,13 +20,13 @@ pressed_keys = set()
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 
-DIST_THRESHOLD = config["eye_bthresh_h"]  # distance on screen; used for left/right/up/down
+DIST_THRESHOLD_H = config["eye_bthresh_h"]  # distance on screen; used for left/right/up/down
 DIST_THRESHOLD_V = config["eye_bthresh_v"]
 
-LEFT_THRESHOLD = SCREEN_W / 2 - DIST_THRESHOLD
-RIGHT_THRESHOLD = SCREEN_W / 2 + DIST_THRESHOLD
-UP_THRESHOLD = SCREEN_H / 2 - DIST_THRESHOLD
-DOWN_THRESHOLD = SCREEN_H / 2 + DIST_THRESHOLD
+LEFT_THRESHOLD = SCREEN_W / 2 - DIST_THRESHOLD_H
+RIGHT_THRESHOLD = SCREEN_W / 2 + DIST_THRESHOLD_H
+UP_THRESHOLD = SCREEN_H / 2 - DIST_THRESHOLD_V
+DOWN_THRESHOLD = SCREEN_H / 2 + DIST_THRESHOLD_V
 
 KEY_MAPPING = {
     "left": config["button_left"],

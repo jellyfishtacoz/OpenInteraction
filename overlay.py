@@ -51,7 +51,7 @@ class BoundaryOverlay(QWidget):
         self.screen_w = QApplication.primaryScreen().size().width()
         self.screen_h = QApplication.primaryScreen().size().height()
 
-        self.threshold = config["eye_bthresh_h"]
+        self.threshold_h = config["eye_bthresh_h"]
         self.threshold_v = config["eye_bthresh_v"]
 
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
@@ -65,12 +65,12 @@ class BoundaryOverlay(QWidget):
         p.setPen(pen)
 
         # vertical boundaries
-        x1 = int(self.screen_w / 2 - self.threshold)
-        x2 = int(self.screen_w / 2 + self.threshold)
+        x1 = int(self.screen_w / 2 - self.threshold_h)
+        x2 = int(self.screen_w / 2 + self.threshold_h)
 
         # horizontal boundaries
-        y1 = int(self.screen_h / 2 - self.threshold)
-        y2 = int(self.screen_h / 2 + self.threshold)
+        y1 = int(self.screen_h / 2 - self.threshold_v)
+        y2 = int(self.screen_h / 2 + self.threshold_v)
 
         # draw lines
         p.drawLine(x1, 0, x1, self.screen_h)
