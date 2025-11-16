@@ -92,6 +92,11 @@ def on_button_right_change(*args):
     config["button_right"] = str(val)
     save_config()
 
+def on_head_overlay_size_change(*args):
+    val = head_overlay_size_var.get()
+    config["head_overlay_size"] = int(val)
+    save_config()
+
 
 def start_calibration():
     global process
@@ -169,6 +174,12 @@ eye_overlay_radius_var = tk.StringVar(value=config.get("eye_overlay_radius"))
 eye_overlay_radius_var.trace_add("write", on_eye_overlay_radius_change)
 eye_overlay_radius_entry = tk.Entry(root, textvariable=eye_overlay_radius_var)
 eye_overlay_radius_entry.pack()
+
+tk.Label(root, text="Head Overlay Size").pack(pady=(10,0))
+head_overlay_size_var = tk.StringVar(value=config.get("head_overlay_size"))
+head_overlay_size_var.trace_add("write", on_head_overlay_size_change)
+head_overlay_size_entry = tk.Entry(root, textvariable=head_overlay_size_var)
+head_overlay_size_entry.pack()
 
 show_overlay_var = tk.BooleanVar(value=config.get("show_overlay"))
 show_overlay_var.trace_add("write", on_show_overlay_change)
