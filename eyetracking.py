@@ -40,7 +40,7 @@ active_head_handler = handler_map[head_action]
 
 app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
-b_overlay = BoundaryOverlay(175)
+b_overlay = BoundaryOverlay()
 h_overlay = HeadOverlay()
 c_overlay.hide()
 b_overlay.hide()

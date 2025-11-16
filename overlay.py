@@ -36,7 +36,7 @@ class CircleOverlay(QWidget):
         painter.drawEllipse(self.gaze_x-OVERLAY_RADIUS, self.gaze_y-OVERLAY_RADIUS, OVERLAY_RADIUS*2, OVERLAY_RADIUS*2)
 
 class BoundaryOverlay(QWidget):
-    def __init__(self, threshold):
+    def __init__(self):
         super().__init__()
 
         self.setWindowFlags(
@@ -51,7 +51,7 @@ class BoundaryOverlay(QWidget):
         self.screen_w = QApplication.primaryScreen().size().width()
         self.screen_h = QApplication.primaryScreen().size().height()
 
-        self.threshold = threshold
+        self.threshold = config["eye_bthresh"]
 
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
         self.show()
@@ -78,6 +78,7 @@ class BoundaryOverlay(QWidget):
         p.drawLine(0, y1, self.screen_w, y1)
         p.drawLine(0, y2, self.screen_w, y2)
 
+
 class HeadOverlay(QWidget):
     def __init__(self):
         super().__init__()
@@ -97,6 +98,7 @@ class HeadOverlay(QWidget):
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
 
         self.max_length = config["head_overlay_size"]  # how tall the line can get
+        self.threshold = config["head_bthresh"] 
 
         self.rotd = (0,0,0)
 
@@ -108,14 +110,25 @@ class HeadOverlay(QWidget):
         p = QPainter(self)
         p.setRenderHint(QPainter.Antialiasing)
 
-        pen = QPen(QColor(255, 255, 0, 220), 6)
+        pen = QPen(QColor(255, 255, 0, 50), 6)
+        penr = QPen(QColor(255, 0, 0, 50), 6)
         p.setPen(pen)
 
         cx = self.screen_w // 2
         cy = self.screen_h // 2
 
+        len = 10
+
         # value = -1 → line fully down
         # value = +1 → line fully up
-        offset = int(self.rotd[1] / config["head_bthresh"] * self.max_length)
+        offsety = int((self.rotd[1] / self.threshold) * self.max_length)
+        offsetx = int((self.rotd[0] / self.threshold) * self.max_length)
 
-        p.drawLine(cx, cy, cx, cy + offset)
+        p.drawLine(cx, cy, cx, cy + offsety)
+        p.drawLine(cx, cy, cx - offsetx, cy)
+
+        p.setPen(penr)
+        p.drawLine(cx - len, cy + self.max_length, cx + len, cy + self.max_length)
+        p.drawLine(cx - len, cy - self.max_length, cx + len, cy - self.max_length)
+        p.drawLine(cx + self.max_length, cy - len, cx + self.max_length, cy + len)
+        p.drawLine(cx - self.max_length, cy - len, cx - self.max_length, cy + len)
