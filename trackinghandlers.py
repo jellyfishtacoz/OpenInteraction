@@ -28,10 +28,10 @@ UP_THRESHOLD = SCREEN_H / 2 - DIST_THRESHOLD
 DOWN_THRESHOLD = SCREEN_H / 2 + DIST_THRESHOLD
 
 KEY_MAPPING = {
-    "left": 'a',
-    "right": 'd',
-    "up": 'w',
-    "down": 's',
+    "left": config["button_left"],
+    "right": config["button_right"],
+    "up": config["button_up"],
+    "down": config["button_down"],
 }
 
 def gaze_to_key_handler(x, y):

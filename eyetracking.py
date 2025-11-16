@@ -22,18 +22,21 @@ head_action = config["head_action"]
 eye_tracking = True
 head_tracking = True
 
-if eye_action == "off": eye_tracking = False
+if eye_action == "off" and not config["blink_is_click"]: eye_tracking = False
 if head_action == "off": head_tracking = False
 
+
+def null(x, y): x = 0
 handler_map = {
     "move_cursor_eye": move_cursor_handler,
     "move_cursor_head": move_cursor_head_handler,
     "press_key_eye": gaze_to_key_handler,
     "press_key_head": head_to_key_handler,
+    "off": null,
 }
 
-if eye_tracking: active_eye_handler = handler_map[eye_action]
-if head_tracking: active_head_handler = handler_map[head_action]
+active_eye_handler = handler_map[eye_action]
+active_head_handler = handler_map[head_action]
 
 app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
@@ -41,12 +44,13 @@ b_overlay = BoundaryOverlay(175)
 c_overlay.hide()
 b_overlay.hide()
 
-if eye_tracking:
-    c_overlay.show()
-
-if head_tracking:
+if eye_tracking and config["show_overlay"]:
+    if config["eye_action"] != "off": c_overlay.show()
     if eye_action == "press_key_eye":
         b_overlay.show()
+
+if head_tracking and config["show_overlay"]:
+    print("show overlay")
 
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model
@@ -112,14 +116,14 @@ while True:
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
             # do action
-            active_eye_handler = (smoothed_x, smoothed_y)
+            active_eye_handler(smoothed_x, smoothed_y)
 
             # update gaze position
             c_overlay.gaze_x = int(smoothed_x)
             c_overlay.gaze_y = int(smoothed_y)
                 
         else:
-            if not blink_state :
+            if not blink_state and config["blink_is_click"]:
                 # Blink detected
                 blink_state = True
                 current_time = time.time()

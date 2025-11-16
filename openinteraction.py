@@ -20,7 +20,13 @@ def load_config():
             "eye_bthresh": 175,
             "head_bthresh": 0.02,
             "head_mouse_range": 1,
-            "eye_overlay_radius": 15
+            "eye_overlay_radius": 15,
+            "show_overlay": True,
+            "blink_is_click": False,
+            "button_up": "w",
+            "button_down": "s",
+            "button_left": "a",
+            "button_right": "d",
         }
         save_config()
 

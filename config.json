@@ -1,8 +1,14 @@
 {
-    "eye_action": "move_cursor_eye",
-    "head_action": "off",
-    "eye_bthresh": 175.0,
-    "head_bthresh": 175.0,
-    "head_mouse_range": 1.0,
-    "eye_overlay_radius": 15
+    "eye_action": "off",
+    "head_action": "move_cursor_head",
+    "eye_bthresh": 175,
+    "head_bthresh": 0.02,
+    "head_mouse_range": 1,
+    "eye_overlay_radius": 15,
+    "show_overlay": true,
+    "blink_is_click": true,
+    "button_up": "w",
+    "button_down": "s",
+    "button_left": "a",
+    "button_right": "d"
 }
