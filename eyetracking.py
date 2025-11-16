@@ -5,7 +5,7 @@ from overlay import CircleOverlay, BoundaryOverlay
 from PyQt5.QtWidgets import QApplication
 import sys
 from eyetrax.filters import KDESmoother
-from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler, head_to_key_handler
+from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler, head_to_key_handler, move_cursor_head_handler
 from pynput import keyboard
 import time
 import json
@@ -22,7 +22,8 @@ eye_tracking = True
 head_tracking = True
 
 handler_map = {
-    "move_cursor": move_cursor_handler,
+    "move_cursor_eye": move_cursor_handler,
+    "move_cursor_head": move_cursor_head_handler,
     "press_key_eye": gaze_to_key_handler,
     "press_key_head": head_to_key_handler,
 }
@@ -51,6 +52,7 @@ enabled = True
 rot = (0, 0, 0)
 rot0 = (0, 0, 0)
 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
+calibrated = False
 
 def on_press(key):
     global enabled
@@ -88,6 +90,10 @@ while True:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
                 rot = (face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                if not calibrated:
+                    rot0 = rot
+                    calibrated = True
+                
                 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
 
                 for handler in active_head_handlers:
