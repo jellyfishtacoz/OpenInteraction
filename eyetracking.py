@@ -8,10 +8,17 @@ from eyetrax.filters import KDESmoother
 from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler, head_to_key_handler
 from pynput import keyboard
 import time
+import json
 
-eye_actions = []  # could be loaded from a config
-head_actions = ["press_key_head"]
-eye_tracking = False
+def load_config():
+    with open("config.json", "r") as f:
+        return json.load(f)
+
+config = load_config()
+
+eye_actions = [config["eye_actions"]]  # could be loaded from a config
+head_actions = [config["head_actions"]]
+eye_tracking = True
 head_tracking = True
 
 handler_map = {
