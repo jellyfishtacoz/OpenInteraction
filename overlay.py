@@ -20,9 +20,11 @@ class CircleOverlay(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setGeometry(0, 0, SCREEN_W, SCREEN_H)
-        self.gaze_x = 960
-        self.gaze_y = 540
+        self.screen_w = QApplication.primaryScreen().size().width()
+        self.screen_h = QApplication.primaryScreen().size().height()
+        self.setGeometry(0, 0, self.screen_w, self.screen_h)
+        self.gaze_x = self.screen_w / 2
+        self.gaze_y = self.screen_h / 2
 
         # refresh every 30ms
         self.timer = QTimer()
@@ -45,8 +47,8 @@ class BoundaryOverlay(QWidget):
             Qt.Tool
         )
 
-        # transparent background
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WA_TransparentForMouseEvents)
 
         self.screen_w = QApplication.primaryScreen().size().width()
         self.screen_h = QApplication.primaryScreen().size().height()
@@ -55,7 +57,6 @@ class BoundaryOverlay(QWidget):
         self.threshold_v = config["eye_bthresh_v"]
 
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
-        self.show()
 
     def paintEvent(self, event):
         p = QPainter(self)

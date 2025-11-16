@@ -43,9 +43,6 @@ app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
 b_overlay = BoundaryOverlay()
 h_overlay = HeadOverlay()
-c_overlay.hide()
-b_overlay.hide()
-h_overlay.hide()
 
 if config["show_overlay"]:
     if config["eye_action"] != "off": c_overlay.show()
