@@ -20,7 +20,7 @@ class CircleOverlay(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setGeometry(0, 0, 1920, 1080)
+        self.setGeometry(0, 0, SCREEN_W, SCREEN_H)
         self.gaze_x = 960
         self.gaze_y = 540
 
