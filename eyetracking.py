@@ -23,9 +23,16 @@ handler_map = {
 app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
 b_overlay = BoundaryOverlay(175)
+c_overlay.hide()
+b_overlay.hide()
+
 if eye_tracking:
-    c_overlay.show()
-    b_overlay.show()
+    if "press_key_eye" in eye_actions:
+        c_overlay.show()
+
+if head_tracking:
+    if "press_key_eye" in eye_actions:
+        b_overlay.show()
 
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model

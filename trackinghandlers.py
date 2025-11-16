@@ -68,7 +68,7 @@ def blink_handler() :
     mouse.release(Button.left)
 
 # --- keypress from head
-threshold = 0.05
+threshold = 0.02
 
 def head_to_key_handler(rotd):
     global pressed_keys
