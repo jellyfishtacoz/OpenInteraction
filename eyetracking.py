@@ -5,17 +5,19 @@ from overlay import CircleOverlay, BoundaryOverlay
 from PyQt5.QtWidgets import QApplication
 import sys
 from eyetrax.filters import KDESmoother
-from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler
+from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler, head_to_key_handler
 from pynput import keyboard
 import time
 
-settings = []  # could be loaded from a config
-eye_tracking = True
-head_tracking = False
+eye_actions = []  # could be loaded from a config
+head_actions = ["press_key_head"]
+eye_tracking = False
+head_tracking = True
 
 handler_map = {
     "move_cursor": move_cursor_handler,
-    "press_key": gaze_to_key_handler,
+    "press_key_eye": gaze_to_key_handler,
+    "press_key_head": head_to_key_handler,
 }
 
 app = QApplication(sys.argv)
@@ -46,7 +48,8 @@ def on_press(key):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-active_handlers = [handler_map[s] for s in settings]
+active_eye_handlers = [handler_map[s] for s in eye_actions]
+active_head_handlers = [handler_map[s] for s in head_actions]
 
 # blink data
 last_blink_time = 0
@@ -64,7 +67,12 @@ while True:
         if results.multi_face_landmarks:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
-                print(face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                rot = (face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                rot0 = (0,0,0)
+                print(rot)
+
+                for handler in active_head_handlers:
+                    handler(rot, rot0)
 
     if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)
@@ -76,7 +84,7 @@ while True:
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
             # do action
-            for handler in active_handlers:
+            for handler in active_eye_handlers:
                 handler(smoothed_x, smoothed_y)
 
             # update gaze position
