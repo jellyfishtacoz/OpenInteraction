@@ -23,7 +23,7 @@ head_action = config["head_action"]
 eye_tracking = True
 head_tracking = True
 
-if eye_action == "off" and not config["blink_is_click"] and not config["blink_is_keybind"]: eye_tracking = False
+if eye_action == "off" and (not config["blink_is_click"]) and (not config["blink_is_keybind"]): eye_tracking = False
 if head_action == "off": head_tracking = False
 
 
@@ -130,7 +130,7 @@ while True:
             c_overlay.gaze_y = int(smoothed_y)
                 
         else:
-            if not blink_state and config["blink_is_click"]:
+            if not blink_state and (config["blink_is_click"] or config['blink_is_keybind']):
                 # Blink detected
                 blink_state = True
                 current_time = time.time()
