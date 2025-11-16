@@ -16,8 +16,8 @@ def load_config():
 
 config = load_config()
 
-eye_actions = [config["eye_actions"]]  # could be loaded from a config
-head_actions = [config["head_actions"]]
+eye_action = [config["eye_action"]]  # could be loaded from a config
+head_action = [config["head_action"]]
 eye_tracking = True
 head_tracking = True
 
@@ -38,7 +38,7 @@ if eye_tracking:
     c_overlay.show()
 
 if head_tracking:
-    if "press_key_eye" in eye_actions:
+    if "press_key_eye" in eye_action:
         b_overlay.show()
 
 estimator = GazeEstimator()
@@ -70,8 +70,8 @@ def on_press(key):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-active_eye_handlers = [handler_map[s] for s in eye_actions]
-active_head_handlers = [handler_map[s] for s in head_actions]
+active_eye_handlers = [handler_map[s] for s in eye_action]
+active_head_handlers = [handler_map[s] for s in head_action]
 
 # blink data
 last_blink_time = 0

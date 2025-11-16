@@ -15,8 +15,8 @@ def load_config():
     else:
         # default settings if no file exists
         config = {
-            "eye_actions": "move_cursor",
-            "head_actions": "",
+            "eye_action": "move_cursor_eye",
+            "head_action": "off",
             "eye_bthresh": 175,
             "head_bthresh": 0.02,
             "head_mouse_range": 0.1
@@ -36,7 +36,8 @@ def on_head_actions_change(val):
     config["head_actions"] = str(val)
     save_config()
 
-def on_eye_bthresh_change(val):
+def on_eye_bthresh_change(*args):
+    val = eye_bthresh_var.get()
     config["eye_bthresh"] = float(val)
     save_config()
 
@@ -90,14 +91,21 @@ root.bind("<Escape>", stop_process)
 
 # Settings UI
 tk.Label(root, text="Eye Action").pack(pady=5)
-tk.Label(root, text="Head Actions").pack(pady=5)
+eye_options = ["move_cursor_eye", "press_key_eye", "off"]
+eye_var = tk.StringVar(value=config.get("eye_action"))
+eye_menu = tk.OptionMenu(root, eye_var, *eye_options, command=on_eye_actions_change)
+eye_menu.pack(pady=5)
 
-eye_options = ["move_cursor_head", "off"]
-head_options = ["move_cursor_head", "off"]
+tk.Label(root, text="Head Action").pack(pady=5)
+head_options = ["move_cursor_head", "press_key_head", "off"]
+head_var = tk.StringVar(value=config.get("head_action"))
+head_menu = tk.OptionMenu(root, head_var, *head_options, command=on_head_actions_change)
+head_menu.pack(pady=5)
 
-click_var = tk.StringVar(value=config.get("eye_actions", "move_cursor"))
-
-click_menu = tk.OptionMenu(root, click_var, *eye_options, command=on_eye_actions_change)
-click_menu.pack(pady=5)
+tk.Label(root, text="Eye Button Threshold").pack()
+eye_bthresh_var = tk.StringVar(value=config.get("eye_bthresh"))
+eye_bthresh_var.trace_add("write", on_eye_bthresh_change)
+eye_bthresh_entry = tk.Entry(root, textvariable=eye_bthresh_var)
+eye_bthresh_entry.pack(pady=5)
 
 root.mainloop()
