@@ -30,11 +30,11 @@ def save_config():
     print("Config saved:", config)
 
 def on_eye_actions_change(val):
-    config["eye_actions"] = str(val)
+    config["eye_action"] = str(val)
     save_config()
 
 def on_head_actions_change(val):
-    config["head_actions"] = str(val)
+    config["head_action"] = str(val)
     save_config()
 
 def on_eye_bthresh_change(*args):
