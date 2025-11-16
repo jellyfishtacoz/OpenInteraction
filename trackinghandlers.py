@@ -5,7 +5,6 @@ import time
 
 
 def move_cursor_handler(x, y):
-    """Moves the mouse to the gaze location"""
     pyautogui.moveTo(x, y)
 
 
@@ -98,4 +97,16 @@ def head_to_key_handler(rotd):
         keyboard.press(key)
 
     pressed_keys = keys_to_press
-    print(pressed_keys)
+
+# --- keypress from head
+range = 0.1
+
+def rotd_to_xy(rotd):
+    rotd[0] / range
+    x = SCREEN_W/2 + -(rotd[0] / range) * SCREEN_W/2
+    y = SCREEN_H/2 + (rotd[1] / range) * SCREEN_H/2
+    return x, y
+
+def move_cursor_head_handler(rotd):
+    x, y = rotd_to_xy(rotd)
+    move_cursor_handler(x,y)
