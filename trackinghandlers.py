@@ -82,7 +82,12 @@ def head_to_key_handler(rotd):
 
     keys_to_press = set()
 
-    xdif = rotd[0]
+    axismap = {
+        "head_yaw": 0,
+        "head_tilt": 3,
+    }
+
+    xdif = rotd[axismap[config["head_x_input"]]]
     ydif = rotd[1]
 
     # horizontal
