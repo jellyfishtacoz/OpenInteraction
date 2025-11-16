@@ -6,7 +6,7 @@
     "head_mouse_range": 1,
     "eye_overlay_radius": 15,
     "show_overlay": true,
-    "blink_is_click": true,
+    "blink_is_click": false,
     "button_up": "w",
     "button_down": "s",
     "button_left": "a",
