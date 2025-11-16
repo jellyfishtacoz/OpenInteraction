@@ -27,6 +27,8 @@ def load_config():
             "show_overlay": True,
             "head_overlay_size": 100,
             "blink_is_click": False,
+            "double_blink": True,
+            "blink_keybind": "8",
             "button_up": "w",
             "button_down": "s",
             "button_left": "a",

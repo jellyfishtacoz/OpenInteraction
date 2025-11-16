@@ -66,7 +66,8 @@ mouse = MouseController()
 
 def blink_handler() :
     # Hold left button
-    mouse.press(Button.left)
+    if config["blink_is_click"]: mouse.press(Button.left)
+    else: keyboard.press(config["blink_keybind"])
 
     time.sleep(0.2)  # hold for 200 ms
 

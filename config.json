@@ -11,6 +11,8 @@
     "eye_overlay_radius": 15,
     "show_overlay": true,
     "blink_is_click": true,
+    "double_blink": true,
+    "blink_keybind": "8",
     "button_up": "w",
     "button_down": "s",
     "button_left": "a",
