@@ -160,7 +160,7 @@ def add_eye_row(label, widget):
     add_eye_row.row += 1
 add_eye_row.row = 0
 
-tk.Label(eye_frame, text="Eye Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+tk.Label(eye_frame, text="Eye Control", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
 add_eye_row.row = 1  # start rows after header
 
 # Head column
@@ -174,7 +174,7 @@ def add_head_row(label, widget):
     add_head_row.row += 1
 add_head_row.row = 0
 
-tk.Label(head_frame, text="Head Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+tk.Label(head_frame, text="Head Control", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
 add_head_row.row = 1  # start rows after header
 
 # ---------- Add Eye Settings ----------
