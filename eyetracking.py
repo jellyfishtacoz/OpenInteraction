@@ -35,13 +35,19 @@ smoother = KDESmoother(SCREEN_W, SCREEN_H)
 
 # toggle
 enabled = True
+rot = (0, 0, 0)
+rot0 = (0, 0, 0)
 
 def on_press(key):
     global enabled
+    global rot0
     try:
         if key.char == 't':  # Press 't' to toggle
             enabled = not enabled
             print(f"Tracking enabled: {enabled}")
+        if key.char == 'c':  # Press 't' to toggle
+            rot0 = rot
+            print(f"Recentered")
     except AttributeError:
         pass
 
@@ -68,8 +74,6 @@ while True:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
                 rot = (face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
-                rot0 = (0,0,0)
-                print(rot)
 
                 for handler in active_head_handlers:
                     handler(rot, rot0)
