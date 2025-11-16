@@ -123,14 +123,16 @@ class HeadOverlay(QWidget):
 
         # value = -1 → line fully down
         # value = +1 → line fully up
-        offsety = int((self.rotd[1] / self.threshold_v) * self.max_length)
+        offsety = int((self.rotd[1] / self.threshold_h) * self.max_length)
         offsetx = int((self.rotd[0] / self.threshold_h) * self.max_length)
+
+        scale = self.threshold_v / self.threshold_h
 
         p.drawLine(cx, cy, cx, cy + offsety)
         p.drawLine(cx, cy, cx - offsetx, cy)
 
         p.setPen(penr)
-        p.drawLine(cx - len, cy + self.max_length, cx + len, cy + self.max_length)
-        p.drawLine(cx - len, cy - self.max_length, cx + len, cy - self.max_length)
+        p.drawLine(cx - len, cy + int(scale * self.max_length), cx + len, cy + int(scale * self.max_length))
+        p.drawLine(cx - len, cy - int(scale * self.max_length), cx + len, cy - int(scale * self.max_length))
         p.drawLine(cx + self.max_length, cy - len, cx + self.max_length, cy + len)
         p.drawLine(cx - self.max_length, cy - len, cx - self.max_length, cy + len)

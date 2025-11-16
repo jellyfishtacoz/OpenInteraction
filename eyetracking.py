@@ -50,7 +50,6 @@ if config["show_overlay"]:
     if config["eye_action"] != "off": c_overlay.show()
     if eye_action == "press_key_eye": b_overlay.show()
     if head_action == "press_key_head": h_overlay.show()
-
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model
 
