@@ -41,12 +41,13 @@ b_overlay = BoundaryOverlay(175)
 c_overlay.hide()
 b_overlay.hide()
 
-if eye_tracking and config["show_overlay"] == 1:
+if eye_tracking and config["show_overlay"]:
     c_overlay.show()
-
-if head_tracking and config["show_overlay"] == 1:
     if eye_action == "press_key_eye":
         b_overlay.show()
+
+if head_tracking and config["show_overlay"]:
+    print("show overlay")
 
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model
