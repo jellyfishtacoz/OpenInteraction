@@ -1,11 +1,11 @@
 import cv2
 import pyautogui
 from eyetrax import GazeEstimator
-from overlay import CircleOverlay, BoundaryOverlay
+from overlay import *
 from PyQt5.QtWidgets import QApplication
 import sys
 from eyetrax.filters import KDESmoother
-from trackinghandlers import move_cursor_handler, gaze_to_key_handler, blink_handler, head_to_key_handler, move_cursor_head_handler
+from trackinghandlers import *
 from pynput import keyboard
 import time
 import json
@@ -41,12 +41,15 @@ active_head_handler = handler_map[head_action]
 app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
 b_overlay = BoundaryOverlay(175)
+h_overlay = HeadOverlay()
 c_overlay.hide()
 b_overlay.hide()
+h_overlay.hide()
 
 if config["show_overlay"]:
     if config["eye_action"] != "off": c_overlay.show()
     if eye_action == "press_key_eye": b_overlay.show()
+    if head_action == "press_key_head": h_overlay.show()
 
 estimator = GazeEstimator()
 estimator.load_model("gaze_model.pkl")  # if you saved a model
@@ -101,6 +104,7 @@ while True:
                 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
 
                 active_head_handler(rotd)
+                h_overlay.rotd = rotd
 
     if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)

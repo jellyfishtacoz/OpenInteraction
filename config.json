@@ -1,6 +1,6 @@
 {
     "eye_action": "off",
-    "head_action": "move_cursor_head",
+    "head_action": "press_key_head",
     "eye_bthresh": 175,
     "head_bthresh": 0.02,
     "head_mouse_range": 1,

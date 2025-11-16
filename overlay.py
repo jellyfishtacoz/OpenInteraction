@@ -77,3 +77,45 @@ class BoundaryOverlay(QWidget):
 
         p.drawLine(0, y1, self.screen_w, y1)
         p.drawLine(0, y2, self.screen_w, y2)
+
+class HeadOverlay(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowFlags(
+            Qt.FramelessWindowHint |
+            Qt.WindowStaysOnTopHint |
+            Qt.Tool
+        )
+
+        self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+        self.screen_w = QApplication.primaryScreen().size().width()
+        self.screen_h = QApplication.primaryScreen().size().height()
+
+        self.setGeometry(0, 0, self.screen_w, self.screen_h)
+
+        self.max_length = int(self.screen_h * 0.3)  # how tall the line can get
+
+        self.rotd = (0,0,0)
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update)
+        self.timer.start(30)
+
+    def paintEvent(self, event):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.Antialiasing)
+
+        pen = QPen(QColor(255, 255, 0, 220), 6)
+        p.setPen(pen)
+
+        cx = self.screen_w // 2
+        cy = self.screen_h // 2
+
+        # value = -1 → line fully down
+        # value = +1 → line fully up
+        offset = int(self.rotd[1] / config["head_bthresh"] * self.max_length)
+
+        p.drawLine(cx, cy, cx, cy + offset)
