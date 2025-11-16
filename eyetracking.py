@@ -27,8 +27,7 @@ c_overlay.hide()
 b_overlay.hide()
 
 if eye_tracking:
-    if "press_key_eye" in eye_actions:
-        c_overlay.show()
+    c_overlay.show()
 
 if head_tracking:
     if "press_key_eye" in eye_actions:
