@@ -11,7 +11,7 @@
     "eye_overlay_radius": 15,
     "show_overlay": true,
     "blink_is_click": false,
-    "double_blink": true,
+    "double_blink": false,
     "blink_is_keybind": true,
     "blink_keybind": "r",
     "button_up": "w",
