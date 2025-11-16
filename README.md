@@ -1,6 +1,11 @@
 ## OpenInteraction
 Team 12 | Jack Dohrn, Bernie Dohrn
 
+## Notes
+- keybinds currently only work with letters and symbols
+- eyetracking works best in well lit areas, close to the camera
+- no current option to switch camera input, uses window's default
+
 ## Run Program
 To run the program, simply run the file `openinteraction.py`
 
