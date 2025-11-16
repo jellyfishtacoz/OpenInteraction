@@ -20,7 +20,8 @@ pressed_keys = set()
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 
-DIST_THRESHOLD = config["eye_bthresh"]  # distance on screen; used for left/right/up/down
+DIST_THRESHOLD = config["eye_bthresh_h"]  # distance on screen; used for left/right/up/down
+DIST_THRESHOLD_V = config["eye_bthresh_v"]
 
 LEFT_THRESHOLD = SCREEN_W / 2 - DIST_THRESHOLD
 RIGHT_THRESHOLD = SCREEN_W / 2 + DIST_THRESHOLD
@@ -73,7 +74,8 @@ def blink_handler() :
     mouse.release(Button.left)
 
 # --- keypress from head
-threshold = config["head_bthresh"]
+threshold_h = config["head_bthresh_h"] * 0.1
+threshold_v = config["head_bthresh_v"] * 0.1
 
 def head_to_key_handler(rotd):
     global pressed_keys
@@ -84,15 +86,15 @@ def head_to_key_handler(rotd):
     ydif = rotd[1]
 
     # horizontal
-    if xdif > threshold:
+    if xdif > threshold_h:
         keys_to_press.add(KEY_MAPPING["left"])
-    elif xdif < -threshold:
+    elif xdif < -threshold_h:
         keys_to_press.add(KEY_MAPPING["right"])
 
     # vertical
-    if ydif < -threshold:
+    if ydif < -threshold_v:
         keys_to_press.add(KEY_MAPPING["up"])
-    elif ydif > threshold:
+    elif ydif > threshold_v:
         keys_to_press.add(KEY_MAPPING["down"])
 
     # Release keys that are no longer active
