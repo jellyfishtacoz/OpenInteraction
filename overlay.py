@@ -3,10 +3,16 @@ from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QBrush, QColor, QPen
 from PyQt5.QtCore import Qt, QTimer
 import pyautogui
-import sys
+import json
+
+def load_config():
+    with open("config.json", "r") as f:
+        return json.load(f)
+
+config = load_config()
 
 SCREEN_W, SCREEN_H = pyautogui.size()
-OVERLAY_RADIUS = 15
+OVERLAY_RADIUS = config["eye_overlay_radius"]
 
 class CircleOverlay(QWidget):
     def __init__(self):

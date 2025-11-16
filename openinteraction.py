@@ -19,7 +19,8 @@ def load_config():
             "head_action": "off",
             "eye_bthresh": 175,
             "head_bthresh": 0.02,
-            "head_mouse_range": 0.1
+            "head_mouse_range": 0.1,
+            "eye_overlay_radius": 15
         }
         save_config()
 
@@ -47,6 +48,10 @@ def on_head_bthresh_change(val):
 
 def on_head_mouse_range_change(val):
     config["head_mouse_range"] = float(val)
+    save_config()
+
+def on_eye_overlay_radius_change(val):
+    config["eye_overlay_radius"] = float(val)
     save_config()
 
 def start_calibration():
