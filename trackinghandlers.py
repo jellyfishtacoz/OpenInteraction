@@ -2,11 +2,17 @@ import pyautogui
 from pynput.keyboard import Key, Controller as KeyboardController
 from pynput.mouse import Button, Controller as MouseController
 import time
+import json
+
+def load_config():
+    with open("config.json", "r") as f:
+        return json.load(f)
+
+config = load_config()
 
 
 def move_cursor_handler(x, y):
     pyautogui.moveTo(x, y)
-
 
 # keypress ---
 keyboard = KeyboardController()
@@ -14,7 +20,7 @@ pressed_keys = set()
 
 SCREEN_W, SCREEN_H = pyautogui.size()
 
-DIST_THRESHOLD = 175  # distance on screen; used for left/right/up/down
+DIST_THRESHOLD = config["eye_bthresh"]  # distance on screen; used for left/right/up/down
 
 LEFT_THRESHOLD = SCREEN_W / 2 - DIST_THRESHOLD
 RIGHT_THRESHOLD = SCREEN_W / 2 + DIST_THRESHOLD
@@ -67,7 +73,7 @@ def blink_handler() :
     mouse.release(Button.left)
 
 # --- keypress from head
-threshold = 0.02
+threshold = config["head_bthresh"]
 
 def head_to_key_handler(rotd):
     global pressed_keys
@@ -99,7 +105,7 @@ def head_to_key_handler(rotd):
     pressed_keys = keys_to_press
 
 # --- keypress from head
-range = 0.1
+range = config["head_mouse_range"] * 0.1
 
 def rotd_to_xy(rotd):
     rotd[0] / range

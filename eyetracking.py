@@ -16,10 +16,14 @@ def load_config():
 
 config = load_config()
 
-eye_actions = [config["eye_actions"]]  # could be loaded from a config
-head_actions = [config["head_actions"]]
+eye_action = config["eye_action"]
+head_action = config["head_action"]
+
 eye_tracking = True
 head_tracking = True
+
+if eye_action == "off": eye_tracking = False
+if head_action == "off": head_tracking = False
 
 handler_map = {
     "move_cursor_eye": move_cursor_handler,
@@ -27,6 +31,9 @@ handler_map = {
     "press_key_eye": gaze_to_key_handler,
     "press_key_head": head_to_key_handler,
 }
+
+if eye_tracking: active_eye_handler = handler_map[eye_action]
+if head_tracking: active_head_handler = handler_map[head_action]
 
 app = QApplication(sys.argv)
 c_overlay = CircleOverlay()
@@ -38,7 +45,7 @@ if eye_tracking:
     c_overlay.show()
 
 if head_tracking:
-    if "press_key_eye" in eye_actions:
+    if eye_action == "press_key_eye":
         b_overlay.show()
 
 estimator = GazeEstimator()
@@ -70,9 +77,6 @@ def on_press(key):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-active_eye_handlers = [handler_map[s] for s in eye_actions]
-active_head_handlers = [handler_map[s] for s in head_actions]
-
 # blink data
 last_blink_time = 0
 blink_count = 0
@@ -96,8 +100,7 @@ while True:
                 
                 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
 
-                for handler in active_head_handlers:
-                    handler(rotd)
+                active_head_handler(rotd)
 
     if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)
@@ -109,8 +112,7 @@ while True:
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
             # do action
-            for handler in active_eye_handlers:
-                handler(smoothed_x, smoothed_y)
+            active_eye_handler = (smoothed_x, smoothed_y)
 
             # update gaze position
             c_overlay.gaze_x = int(smoothed_x)
