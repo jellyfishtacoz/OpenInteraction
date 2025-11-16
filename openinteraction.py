@@ -63,6 +63,35 @@ def on_eye_overlay_radius_change(*args):
     config["eye_overlay_radius"] = int(val)
     save_config()
 
+def on_show_overlay_change(*args):
+    config["show_overlay"] = show_overlay_var.get()
+    save_config()
+
+def on_blink_is_click_change(*args):
+    config["blink_is_click"] = blink_is_click_var.get()
+    save_config()
+
+def on_button_up_change(*args):
+    val = button_up_var.get()
+    config["button_up"] = str(val)
+    save_config()
+
+def on_button_down_change(*args):
+    val = button_down_var.get()
+    config["button_down"] = str(val)
+    save_config()
+
+def on_button_left_change(*args):
+    val = button_left_var.get()
+    config["button_left"] = str(val)
+    save_config()
+
+def on_button_right_change(*args):
+    val = button_right_var.get()
+    config["button_right"] = str(val)
+    save_config()
+
+
 def start_calibration():
     global process
     if process is None or process.poll() is not None:  # not running
@@ -139,5 +168,39 @@ eye_overlay_radius_var = tk.StringVar(value=config.get("eye_overlay_radius"))
 eye_overlay_radius_var.trace_add("write", on_eye_overlay_radius_change)
 eye_overlay_radius_entry = tk.Entry(root, textvariable=eye_overlay_radius_var)
 eye_overlay_radius_entry.pack()
+
+show_overlay_var = tk.BooleanVar(value=config.get("show_overlay"))
+show_overlay_var.trace_add("write", on_show_overlay_change)
+show_overlay_check = tk.Checkbutton(root, text="Show Overlay", variable=show_overlay_var)
+show_overlay_check.pack(pady=(10,0)) #anchor="w"
+
+blink_is_click_var = tk.BooleanVar(value=config.get("blink_is_click"))
+blink_is_click_var.trace_add("write", on_blink_is_click_change)
+blink_is_click_check = tk.Checkbutton(root, text="Click on Blink", variable=blink_is_click_var)
+blink_is_click_check.pack(pady=(10,0)) #anchor="w"
+
+tk.Label(root, text="Up Button").pack(pady=(10,0))
+button_up_var = tk.StringVar(value=config.get("button_up"))
+button_up_var.trace_add("write", on_button_up_change)
+button_up_entry = tk.Entry(root, textvariable=button_up_var)
+button_up_entry.pack()
+
+tk.Label(root, text="Down Button").pack(pady=(10,0))
+button_down_var = tk.StringVar(value=config.get("button_down"))
+button_down_var.trace_add("write", on_button_down_change)
+button_down_entry = tk.Entry(root, textvariable=button_down_var)
+button_down_entry.pack()
+
+tk.Label(root, text="Left Button").pack(pady=(10,0))
+button_left_var = tk.StringVar(value=config.get("button_left"))
+button_left_var.trace_add("write", on_button_left_change)
+button_left_entry = tk.Entry(root, textvariable=button_left_var)
+button_left_entry.pack()
+
+tk.Label(root, text="Right Button").pack(pady=(10,0))
+button_right_var = tk.StringVar(value=config.get("button_right"))
+button_right_var.trace_add("write", on_button_right_change)
+button_right_entry = tk.Entry(root, textvariable=button_right_var)
+button_right_entry.pack()
 
 root.mainloop()
