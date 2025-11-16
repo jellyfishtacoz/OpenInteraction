@@ -19,7 +19,7 @@ def load_config():
             "head_action": "off",
             "eye_bthresh": 175,
             "head_bthresh": 0.02,
-            "head_mouse_range": 0.1,
+            "head_mouse_range": 1,
             "eye_overlay_radius": 15
         }
         save_config()
