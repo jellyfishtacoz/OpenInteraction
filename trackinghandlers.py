@@ -72,7 +72,8 @@ def blink_handler() :
     time.sleep(0.2)  # hold for 200 ms
 
     # Release
-    mouse.release(Button.left)
+    if config["blink_is_click"]: mouse.release(Button.left)
+    else: keyboard.release(config["blink_keybind"])
 
 # --- keypress from head
 threshold_h = config["head_bthresh_h"]

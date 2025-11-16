@@ -22,7 +22,7 @@ def load_config():
             "eye_bthresh_v": 175,
             "head_bthresh_h": 0.1,
             "head_bthresh_v": 0.1,
-            "head_mouse_range": 1,
+            "head_mouse_range": 10,
             "eye_overlay_radius": 15,
             "show_overlay": True,
             "head_overlay_size": 100,

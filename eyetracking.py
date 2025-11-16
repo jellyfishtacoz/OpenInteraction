@@ -58,8 +58,12 @@ smoother = KDESmoother(SCREEN_W, SCREEN_H)
 enabled = True
 rot = (0, 0, 0)
 rot0 = (0, 0, 0)
+rot2 = (0, 0, 0)
+rot02 = (0, 0, 0)
 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
+rotd2 = (rot2[0] - rot02[0], rot2[1] - rot02[1], rot2[2] - rot02[2])
 calibrated = False
+calibrated2 = False
 
 def on_press(key):
     global enabled
@@ -93,15 +97,21 @@ while True:
         if results.multi_face_landmarks:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
-                rot = get_head_rotation(face, frame.shape[1], frame.shape[0])
-                if not calibrated:
-                    rot0 = rot
-                    calibrated = True
-                
-                rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
-
-                active_head_handler(rotd)
-                h_overlay.rotd = rotd
+                if head_action == "move_cursor_head" :
+                    rot2 = (face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                    if not calibrated2:
+                        rot02 = rot2
+                        calibrated2 = True
+                    rotd2 = (rot2[0] - rot02[0], rot2[1] - rot02[1], rot2[2] - rot02[2])
+                    active_head_handler(rotd2)
+                else:
+                    rot = get_head_rotation(face, frame.shape[1], frame.shape[0])
+                    if not calibrated:
+                        rot0 = rot
+                        calibrated = True
+                    rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
+                    active_head_handler(rotd)
+                    h_overlay.rotd = rotd
 
     if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)
