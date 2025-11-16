@@ -90,8 +90,10 @@ root.bind("<Escape>", stop_process)
 
 # Settings UI
 tk.Label(root, text="Eye Action").pack(pady=5)
+tk.Label(root, text="Head Actions").pack(pady=5)
 
-eye_options = ["move_cursor", "off"]
+eye_options = ["move_cursor_head", "off"]
+head_options = ["move_cursor_head", "off"]
 
 click_var = tk.StringVar(value=config.get("eye_actions", "move_cursor"))
 
