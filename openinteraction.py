@@ -17,6 +17,7 @@ def load_config():
         config = {
             "eye_action": "move_cursor_eye",
             "head_action": "off",
+            "head_x_input": "head_yaw",
             "eye_bthresh_h": 175,
             "eye_bthresh_v": 175,
             "head_bthresh_h": 0.1,
@@ -44,6 +45,10 @@ def on_eye_actions_change(val):
 
 def on_head_actions_change(val):
     config["head_action"] = str(val)
+    save_config()
+
+def on_head_x_input_change(val):
+    config["head_x_input"] = str(val)
     save_config()
 
 def on_eye_bthresh_h_change(*args):
@@ -217,6 +222,11 @@ head_options = ["move_cursor_head", "press_key_head", "off"]
 head_var = tk.StringVar(value=config.get("head_action"))
 head_menu = tk.OptionMenu(head_frame, head_var, *head_options, command=on_head_actions_change)
 add_head_row("Head Action", head_menu)
+
+head_x_input_options = ["head_yaw", "head_tilt"]
+head_x_input_var = tk.StringVar(value=config.get("head_x_input"))
+head_x_input_menu = tk.OptionMenu(head_frame, head_x_input_var, *head_x_input_options, command=on_head_x_input_change)
+add_head_row("Head X-Axis Input", head_x_input_menu)
 
 head_bthresh_h_var = tk.StringVar(value=config.get("head_bthresh_h"))
 head_bthresh_h_var.trace_add("write", on_head_bthresh_h_change)
