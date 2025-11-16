@@ -17,8 +17,10 @@ def load_config():
         config = {
             "eye_action": "move_cursor_eye",
             "head_action": "off",
-            "eye_bthresh": 175,
-            "head_bthresh": 0.02,
+            "eye_bthresh_h": 175,
+            "eye_bthresh_v": 175,
+            "head_bthresh_h": 0.1,
+            "head_bthresh_v": 0.1,
             "head_mouse_range": 1,
             "eye_overlay_radius": 15,
             "show_overlay": True,

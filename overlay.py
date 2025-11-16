@@ -51,7 +51,8 @@ class BoundaryOverlay(QWidget):
         self.screen_w = QApplication.primaryScreen().size().width()
         self.screen_h = QApplication.primaryScreen().size().height()
 
-        self.threshold = config["eye_bthresh"]
+        self.threshold = config["eye_bthresh_h"]
+        self.threshold_v = config["eye_bthresh_v"]
 
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
         self.show()
@@ -98,7 +99,8 @@ class HeadOverlay(QWidget):
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
 
         self.max_length = config["head_overlay_size"]  # how tall the line can get
-        self.threshold = config["head_bthresh"] 
+        self.threshold_h = config["head_bthresh_h"] * 0.1
+        self.threshold_v = config["head_bthresh_v"] * 0.1
 
         self.rotd = (0,0,0)
 
@@ -121,8 +123,8 @@ class HeadOverlay(QWidget):
 
         # value = -1 → line fully down
         # value = +1 → line fully up
-        offsety = int((self.rotd[1] / self.threshold) * self.max_length)
-        offsetx = int((self.rotd[0] / self.threshold) * self.max_length)
+        offsety = int((self.rotd[1] / self.threshold_v) * self.max_length)
+        offsetx = int((self.rotd[0] / self.threshold_h) * self.max_length)
 
         p.drawLine(cx, cy, cx, cy + offsety)
         p.drawLine(cx, cy, cx - offsetx, cy)
