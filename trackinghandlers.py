@@ -70,24 +70,24 @@ def blink_handler() :
 # --- keypress from head
 threshold = 0.05
 
-def head_to_key_handler(rot, rot0):
+def head_to_key_handler(rotd):
     global pressed_keys
 
     keys_to_press = set()
 
-    xdif = rot[0] - rot0[0]
-    ydif = rot[1] - rot0[1]
+    xdif = rotd[0]
+    ydif = rotd[1]
 
     # horizontal
-    if xdif < -threshold:
+    if xdif > threshold:
         keys_to_press.add(KEY_MAPPING["left"])
-    elif xdif > threshold:
+    elif xdif < -threshold:
         keys_to_press.add(KEY_MAPPING["right"])
 
     # vertical
-    if ydif > threshold:
+    if ydif < -threshold:
         keys_to_press.add(KEY_MAPPING["up"])
-    elif ydif < -threshold:
+    elif ydif > threshold:
         keys_to_press.add(KEY_MAPPING["down"])
 
     # Release keys that are no longer active

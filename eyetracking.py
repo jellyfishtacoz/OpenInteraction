@@ -37,6 +37,7 @@ smoother = KDESmoother(SCREEN_W, SCREEN_H)
 enabled = True
 rot = (0, 0, 0)
 rot0 = (0, 0, 0)
+rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
 
 def on_press(key):
     global enabled
@@ -74,9 +75,10 @@ while True:
             for face in results.multi_face_landmarks:
                 # Extract 3D landmarks for head pose estimation
                 rot = (face.landmark[0].x, face.landmark[0].y, face.landmark[0].z)
+                rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
 
                 for handler in active_head_handlers:
-                    handler(rot, rot0)
+                    handler(rotd)
 
     if eye_tracking and enabled:
         features, blink = estimator.extract_features(frame)
