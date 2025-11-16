@@ -23,7 +23,7 @@ head_action = config["head_action"]
 eye_tracking = True
 head_tracking = True
 
-if eye_action == "off" and not config["blink_is_click"]: eye_tracking = False
+if eye_action == "off" and not config["blink_is_click"] and not config["blink_is_keybind"]: eye_tracking = False
 if head_action == "off": head_tracking = False
 
 
