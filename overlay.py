@@ -96,7 +96,7 @@ class HeadOverlay(QWidget):
 
         self.setGeometry(0, 0, self.screen_w, self.screen_h)
 
-        self.max_length = int(self.screen_h * 0.3)  # how tall the line can get
+        self.max_length = config["head_overlay_size"]  # how tall the line can get
 
         self.rotd = (0,0,0)
 

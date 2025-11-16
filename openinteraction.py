@@ -22,6 +22,7 @@ def load_config():
             "head_mouse_range": 1,
             "eye_overlay_radius": 15,
             "show_overlay": True,
+            "head_overlay_size": 175,
             "blink_is_click": False,
             "button_up": "w",
             "button_down": "s",
