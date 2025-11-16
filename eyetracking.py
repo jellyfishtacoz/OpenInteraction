@@ -99,7 +99,6 @@ while True:
                     calibrated = True
                 
                 rotd = (rot[0] - rot0[0], rot[1] - rot0[1], rot[2] - rot0[2])
-                print(rotd)
 
                 active_head_handler(rotd)
                 h_overlay.rotd = rotd
@@ -125,17 +124,23 @@ while True:
                 # Blink detected
                 blink_state = True
                 current_time = time.time()
-                if current_time - last_blink_time < double_blink_threshold:
-                    blink_count += 1
-                else:
-                    blink_count = 1  # reset count if too long
 
-                last_blink_time = current_time
-
-                if blink_count == 2:
-                    print("Double blink detected! Clicking mouse...")
+                if not config["double_blink"]:
+                    print("Single Blink detected! Clicking mouse...")
                     blink_handler()
-                    blink_count = 0  # reset after double blink
+                    blink_count = 0
+                else:
+                    if current_time - last_blink_time < double_blink_threshold:
+                        blink_count += 1
+                    else:
+                        blink_count = 1  # reset count if too long
+
+                    last_blink_time = current_time
+
+                    if blink_count == 2:
+                        print("Double blink detected! Clicking mouse...")
+                        blink_handler()
+                        blink_count = 0  # reset after double blink
 
     # Quit with 'q' -- doesnt work
     if cv2.waitKey(1) & 0xFF == ord('q'):

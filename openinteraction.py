@@ -87,10 +87,6 @@ def on_show_overlay_change(*args):
     config["show_overlay"] = show_overlay_var.get()
     save_config()
 
-def on_blink_is_click_change(*args):
-    config["blink_is_click"] = blink_is_click_var.get()
-    save_config()
-
 def on_button_up_change(*args):
     val = button_up_var.get()
     config["button_up"] = str(val)
@@ -116,6 +112,49 @@ def on_head_overlay_size_change(*args):
     config["head_overlay_size"] = int(val)
     save_config()
 
+updating_blink_flags = False
+
+def on_blink_is_click_change(*args):
+    global updating_blink_flags
+    if updating_blink_flags:
+        return  # avoid recursive calls
+
+    val = blink_is_click_var.get()
+    config["blink_is_click"] = val
+    save_config()
+
+    if val:  # it was turned ON
+        updating_blink_flags = True
+        blink_is_keybind_var.set(False)
+        config["blink_is_keybind"] = False
+        save_config()
+        updating_blink_flags = False
+
+
+def on_blink_is_keybind_change(*args):
+    global updating_blink_flags
+    if updating_blink_flags:
+        return  # avoid recursive calls
+
+    val = blink_is_keybind_var.get()
+    config["blink_is_keybind"] = val
+    save_config()
+
+    if val:  # it was turned ON
+        updating_blink_flags = True
+        blink_is_click_var.set(False)
+        config["blink_is_click"] = False
+        save_config()
+        updating_blink_flags = False
+
+def on_double_blink_change(*args):
+    config["double_blink"] = double_blink_var.get()
+    save_config()
+
+def on_blink_keybind_change(*args):
+    val = blink_keybind_var.get()
+    config["blink_keybind"] = str(val)
+    save_config()
 
 def start_calibration():
     global process
@@ -216,8 +255,19 @@ add_eye_row("Eye Overlay Radius", tk.Entry(eye_frame, textvariable=eye_overlay_r
 
 blink_is_click_var = tk.BooleanVar(value=config["blink_is_click"])
 blink_is_click_var.trace_add("write", on_blink_is_click_change)
-add_eye_row("Click on Blink", tk.Checkbutton(eye_frame, variable=blink_is_click_var))
+add_eye_row("Blink is Click", tk.Checkbutton(eye_frame, variable=blink_is_click_var))
 
+blink_is_keybind_var = tk.BooleanVar(value=config["blink_is_keybind"])
+blink_is_keybind_var.trace_add("write", on_blink_is_keybind_change)
+add_eye_row("Blink is Keybind", tk.Checkbutton(eye_frame, variable=blink_is_keybind_var))
+
+double_blink_var = tk.BooleanVar(value=config["double_blink"])
+double_blink_var.trace_add("write", on_double_blink_change)
+add_eye_row("Double blink for blink Input", tk.Checkbutton(eye_frame, variable=double_blink_var))
+
+blink_keybind_var = tk.StringVar(value=config.get("blink_keybind"))
+blink_keybind_var.trace_add("write", on_blink_keybind_change)
+add_eye_row("Blink Keybind", tk.Entry(eye_frame, textvariable=blink_keybind_var))
 
 # ---------- Add Head Settings ----------
 head_options = ["move_cursor_head", "press_key_head", "off"]
