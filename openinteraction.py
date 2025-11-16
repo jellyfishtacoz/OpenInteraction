@@ -119,100 +119,136 @@ def stop_process(event=None):
         print("Process terminated")
         process = None
 
-# ---- UI ----
+# ---------------- UI ----------------
 
 root = tk.Tk()
 root.title("openinteraction")
-root.geometry("600x600")
+root.geometry("700x600")
 root.bind("<Escape>", stop_process)
 
 load_config()
 
-# ---------- TOP CONTROLS (Calibration + Cursor) ----------
+# ---------- TOP CONTROLS ----------
 top_frame = tk.Frame(root, pady=10)
 top_frame.pack()
 
 tk.Label(top_frame, text="Press for calibration").pack()
 tk.Button(top_frame, text="Start Calibration", command=start_calibration).pack()
 
-tk.Label(top_frame, text="Press to Start").pack(pady = (10,0))
-tk.Button(top_frame, text="Start Interface", command=start_cursor).pack()
+tk.Label(top_frame, text="Interface Control").pack(pady=(10, 0))
+
+# Frame to hold Start and Stop buttons side by side
+interface_frame = tk.Frame(top_frame)
+interface_frame.pack(pady=5)
+
+tk.Button(interface_frame, text="Start Interface", command=start_cursor).pack(side="left", padx=5)
+tk.Button(interface_frame, text="Stop Interface", command=stop_process).pack(side="left", padx=5)
 
 
 # ---------- SETTINGS FRAME ----------
 settings = tk.Frame(root, padx=15, pady=15)
 settings.pack(fill="x")
 
+# Eye column
+eye_frame = tk.Frame(settings)
+eye_frame.grid(row=0, column=0, sticky="nw", padx=10)
 
-# Helper to add rows neatly
-def add_row(label, widget):
-    row = add_row.row
-    tk.Label(settings, text=label).grid(row=row, column=0, sticky="w", pady=5)
+def add_eye_row(label, widget):
+    row = add_eye_row.row
+    tk.Label(eye_frame, text=label).grid(row=row, column=0, sticky="w", pady=5)
     widget.grid(row=row, column=1, sticky="w", padx=10)
-    add_row.row += 1
-add_row.row = 0
+    add_eye_row.row += 1
+add_eye_row.row = 0
 
+tk.Label(eye_frame, text="Eye Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+add_eye_row.row = 1  # start rows after header
 
-# ---------- EYE SETTINGS ----------
+# Head column
+head_frame = tk.Frame(settings)
+head_frame.grid(row=0, column=1, sticky="nw", padx=10)
+
+def add_head_row(label, widget):
+    row = add_head_row.row
+    tk.Label(head_frame, text=label).grid(row=row, column=0, sticky="w", pady=5)
+    widget.grid(row=row, column=1, sticky="w", padx=10)
+    add_head_row.row += 1
+add_head_row.row = 0
+
+tk.Label(head_frame, text="Head Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+add_head_row.row = 1  # start rows after header
+
+# ---------- Add Eye Settings ----------
 eye_options = ["move_cursor_eye", "press_key_eye", "off"]
 eye_var = tk.StringVar(value=config.get("eye_action"))
-eye_menu = tk.OptionMenu(settings, eye_var, *eye_options, command=on_eye_actions_change)
-add_row("Eye Action", eye_menu)
+eye_menu = tk.OptionMenu(eye_frame, eye_var, *eye_options, command=on_eye_actions_change)
+add_eye_row("Eye Action", eye_menu)
 
 eye_bthresh_var = tk.StringVar(value=config.get("eye_bthresh"))
 eye_bthresh_var.trace_add("write", on_eye_bthresh_change)
-add_row("Eye Button Threshold", tk.Entry(settings, textvariable=eye_bthresh_var))
+add_eye_row("Eye Button Threshold", tk.Entry(eye_frame, textvariable=eye_bthresh_var))
 
 eye_overlay_radius_var = tk.StringVar(value=config.get("eye_overlay_radius"))
 eye_overlay_radius_var.trace_add("write", on_eye_overlay_radius_change)
-add_row("Eye Overlay Radius", tk.Entry(settings, textvariable=eye_overlay_radius_var))
+add_eye_row("Eye Overlay Radius", tk.Entry(eye_frame, textvariable=eye_overlay_radius_var))
+
+blink_is_click_var = tk.BooleanVar(value=config["blink_is_click"])
+blink_is_click_var.trace_add("write", on_blink_is_click_change)
+add_eye_row("Click on Blink", tk.Checkbutton(eye_frame, variable=blink_is_click_var))
 
 
-# ---------- HEAD SETTINGS ----------
+# ---------- Add Head Settings ----------
 head_options = ["move_cursor_head", "press_key_head", "off"]
 head_var = tk.StringVar(value=config.get("head_action"))
-head_menu = tk.OptionMenu(settings, head_var, *head_options, command=on_head_actions_change)
-add_row("Head Action", head_menu)
+head_menu = tk.OptionMenu(head_frame, head_var, *head_options, command=on_head_actions_change)
+add_head_row("Head Action", head_menu)
 
 head_bthresh_var = tk.StringVar(value=config.get("head_bthresh"))
 head_bthresh_var.trace_add("write", on_head_bthresh_change)
-add_row("Head Button Threshold", tk.Entry(settings, textvariable=head_bthresh_var))
+add_head_row("Head Button Threshold", tk.Entry(head_frame, textvariable=head_bthresh_var))
 
 head_mouse_range_var = tk.StringVar(value=config.get("head_mouse_range"))
 head_mouse_range_var.trace_add("write", on_head_mouse_range_change)
-add_row("Head Mouse Range", tk.Entry(settings, textvariable=head_mouse_range_var))
+add_head_row("Head Mouse Range", tk.Entry(head_frame, textvariable=head_mouse_range_var))
 
 head_overlay_size_var = tk.StringVar(value=config.get("head_overlay_size"))
 head_overlay_size_var.trace_add("write", on_head_overlay_size_change)
-add_row("Head Overlay Size", tk.Entry(settings, textvariable=head_overlay_size_var))
+add_head_row("Head Overlay Size", tk.Entry(head_frame, textvariable=head_overlay_size_var))
 
 
-# ---------- TOGGLES ----------
-show_overlay_var = tk.BooleanVar(value=config.get("show_overlay"))
+# ---------- BUTTON BINDINGS BELOW BOTH COLUMNS ----------
+button_frame = tk.Frame(settings)
+button_frame.grid(row=1, column=0, columnspan=2, pady=(20,0))  # span both columns
+
+def add_button_row(label, widget):
+    row = add_button_row.row
+    tk.Label(button_frame, text=label).grid(row=row, column=0, sticky="w", pady=5)
+    widget.grid(row=row, column=1, sticky="w", padx=10)
+    add_button_row.row += 1
+add_button_row.row = 0
+
+tk.Label(button_frame, text="Other Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+add_button_row.row = 1
+
+show_overlay_var = tk.BooleanVar(value=config["show_overlay"])
 show_overlay_var.trace_add("write", on_show_overlay_change)
-add_row("Show Overlay", tk.Checkbutton(settings, variable=show_overlay_var))
+add_button_row("Show Overlay", tk.Checkbutton(button_frame, variable=show_overlay_var))
 
-blink_is_click_var = tk.BooleanVar(value=config.get("blink_is_click"))
-blink_is_click_var.trace_add("write", on_blink_is_click_change)
-add_row("Click on Blink", tk.Checkbutton(settings, variable=blink_is_click_var))
-
-
-# ---------- BUTTON BINDS ----------
 button_up_var = tk.StringVar(value=config.get("button_up"))
 button_up_var.trace_add("write", on_button_up_change)
-add_row("Up Button", tk.Entry(settings, textvariable=button_up_var))
+add_button_row("Up Button", tk.Entry(button_frame, textvariable=button_up_var))
 
 button_down_var = tk.StringVar(value=config.get("button_down"))
 button_down_var.trace_add("write", on_button_down_change)
-add_row("Down Button", tk.Entry(settings, textvariable=button_down_var))
+add_button_row("Down Button", tk.Entry(button_frame, textvariable=button_down_var))
 
 button_left_var = tk.StringVar(value=config.get("button_left"))
 button_left_var.trace_add("write", on_button_left_change)
-add_row("Left Button", tk.Entry(settings, textvariable=button_left_var))
+add_button_row("Left Button", tk.Entry(button_frame, textvariable=button_left_var))
 
 button_right_var = tk.StringVar(value=config.get("button_right"))
 button_right_var.trace_add("write", on_button_right_change)
-add_row("Right Button", tk.Entry(settings, textvariable=button_right_var))
+add_button_row("Right Button", tk.Entry(button_frame, textvariable=button_right_var))
+
 
 # ---------- FOOTER ----------
 footer = tk.Frame(root, pady=10)
@@ -220,6 +256,9 @@ footer.pack(side="bottom", fill="x")
 
 left = tk.Label(footer, text="Press ESC to exit")
 left.pack(side="left", padx=20, anchor="w")
+
+middle = tk.Label(footer, text="Press C to recenter")
+middle.place(relx=0.5, rely=0.5, anchor="center")  # or use place to center precisely
 
 right = tk.Label(footer, text="Press T to pause tracking")
 right.pack(side="right", padx=20, anchor="e")
