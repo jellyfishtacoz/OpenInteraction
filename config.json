@@ -1,9 +1,9 @@
 {
     "eye_action": "off",
     "head_action": "press_key_head",
-    "eye_bthresh": 175,
+    "eye_bthresh": 175.0,
     "head_bthresh": 0.02,
-    "head_mouse_range": 1,
+    "head_mouse_range": 1.0,
     "head_overlay_size": 175,
     "eye_overlay_radius": 15,
     "show_overlay": true,
@@ -11,5 +11,5 @@
     "button_up": "w",
     "button_down": "s",
     "button_left": "a",
-    "button_right": "d"
+    "button_right": "s"
 }

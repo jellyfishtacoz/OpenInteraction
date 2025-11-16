@@ -119,100 +119,100 @@ def stop_process(event=None):
         print("Process terminated")
         process = None
 
+# ---- UI ----
+
 root = tk.Tk()
 root.title("openinteraction")
-root.geometry("600x400")
-
+root.geometry("600x600")
 root.bind("<Escape>", stop_process)
 
 load_config()
 
-# Calibration button
-tk.Label(root, text="Press for calibration").pack(pady=(20,0))
-tk.Button(root, text="Start Calibration", command=start_calibration).pack()
+# ---------- TOP CONTROLS (Calibration + Cursor) ----------
+top_frame = tk.Frame(root, pady=10)
+top_frame.pack()
 
-# Cursor button
-tk.Label(root, text="Press for cursor").pack(pady=(10,0))
-tk.Button(root, text="Start Cursor", command=start_cursor).pack()
+tk.Label(top_frame, text="Press for calibration").pack()
+tk.Button(top_frame, text="Start Calibration", command=start_calibration).pack()
 
-# Bind Esc to stop subprocess
-root.bind("<Escape>", stop_process)
+tk.Label(top_frame, text="Press for cursor", pady=10).pack()
+tk.Button(top_frame, text="Start Cursor", command=start_cursor).pack()
 
-# Settings UI
-tk.Label(root, text="Eye Action").pack(pady=(20,0))
+
+# ---------- SETTINGS FRAME ----------
+settings = tk.Frame(root, padx=15, pady=15)
+settings.pack(fill="x")
+
+
+# Helper to add rows neatly
+def add_row(label, widget):
+    row = add_row.row
+    tk.Label(settings, text=label).grid(row=row, column=0, sticky="w", pady=5)
+    widget.grid(row=row, column=1, sticky="w", padx=10)
+    add_row.row += 1
+add_row.row = 0
+
+
+# ---------- EYE SETTINGS ----------
 eye_options = ["move_cursor_eye", "press_key_eye", "off"]
 eye_var = tk.StringVar(value=config.get("eye_action"))
-eye_menu = tk.OptionMenu(root, eye_var, *eye_options, command=on_eye_actions_change)
-eye_menu.pack()
+eye_menu = tk.OptionMenu(settings, eye_var, *eye_options, command=on_eye_actions_change)
+add_row("Eye Action", eye_menu)
 
-tk.Label(root, text="Head Action").pack(pady=(10,0))
-head_options = ["move_cursor_head", "press_key_head", "off"]
-head_var = tk.StringVar(value=config.get("head_action"))
-head_menu = tk.OptionMenu(root, head_var, *head_options, command=on_head_actions_change)
-head_menu.pack()
-
-tk.Label(root, text="Eye Button Threshold").pack(pady=(10,0))
 eye_bthresh_var = tk.StringVar(value=config.get("eye_bthresh"))
 eye_bthresh_var.trace_add("write", on_eye_bthresh_change)
-eye_bthresh_entry = tk.Entry(root, textvariable=eye_bthresh_var)
-eye_bthresh_entry.pack(pady=5)
+add_row("Eye Button Threshold", tk.Entry(settings, textvariable=eye_bthresh_var))
 
-tk.Label(root, text="Head Button Threshold").pack(pady=(10,0))
-head_bthresh_var = tk.StringVar(value=config.get("head_bthresh"))
-head_bthresh_var.trace_add("write", on_head_bthresh_change)
-head_bthresh_entry = tk.Entry(root, textvariable=head_bthresh_var)
-head_bthresh_entry.pack()
-
-tk.Label(root, text="Head Mouse Range").pack(pady=(10,0))
-head_mouse_range_var = tk.StringVar(value=config.get("head_mouse_range"))
-head_mouse_range_var.trace_add("write", on_head_mouse_range_change)
-head_mouse_range_entry = tk.Entry(root, textvariable=head_mouse_range_var)
-head_mouse_range_entry.pack()
-
-tk.Label(root, text="Eye Overlay Radius").pack(pady=(10,0))
 eye_overlay_radius_var = tk.StringVar(value=config.get("eye_overlay_radius"))
 eye_overlay_radius_var.trace_add("write", on_eye_overlay_radius_change)
-eye_overlay_radius_entry = tk.Entry(root, textvariable=eye_overlay_radius_var)
-eye_overlay_radius_entry.pack()
+add_row("Eye Overlay Radius", tk.Entry(settings, textvariable=eye_overlay_radius_var))
 
-tk.Label(root, text="Head Overlay Size").pack(pady=(10,0))
+
+# ---------- HEAD SETTINGS ----------
+head_options = ["move_cursor_head", "press_key_head", "off"]
+head_var = tk.StringVar(value=config.get("head_action"))
+head_menu = tk.OptionMenu(settings, head_var, *head_options, command=on_head_actions_change)
+add_row("Head Action", head_menu)
+
+head_bthresh_var = tk.StringVar(value=config.get("head_bthresh"))
+head_bthresh_var.trace_add("write", on_head_bthresh_change)
+add_row("Head Button Threshold", tk.Entry(settings, textvariable=head_bthresh_var))
+
+head_mouse_range_var = tk.StringVar(value=config.get("head_mouse_range"))
+head_mouse_range_var.trace_add("write", on_head_mouse_range_change)
+add_row("Head Mouse Range", tk.Entry(settings, textvariable=head_mouse_range_var))
+
 head_overlay_size_var = tk.StringVar(value=config.get("head_overlay_size"))
 head_overlay_size_var.trace_add("write", on_head_overlay_size_change)
-head_overlay_size_entry = tk.Entry(root, textvariable=head_overlay_size_var)
-head_overlay_size_entry.pack()
+add_row("Head Overlay Size", tk.Entry(settings, textvariable=head_overlay_size_var))
 
+
+# ---------- TOGGLES ----------
 show_overlay_var = tk.BooleanVar(value=config.get("show_overlay"))
 show_overlay_var.trace_add("write", on_show_overlay_change)
-show_overlay_check = tk.Checkbutton(root, text="Show Overlay", variable=show_overlay_var)
-show_overlay_check.pack(pady=(10,0)) #anchor="w"
+add_row("Show Overlay", tk.Checkbutton(settings, variable=show_overlay_var))
 
 blink_is_click_var = tk.BooleanVar(value=config.get("blink_is_click"))
 blink_is_click_var.trace_add("write", on_blink_is_click_change)
-blink_is_click_check = tk.Checkbutton(root, text="Click on Blink", variable=blink_is_click_var)
-blink_is_click_check.pack(pady=(10,0)) #anchor="w"
+add_row("Click on Blink", tk.Checkbutton(settings, variable=blink_is_click_var))
 
-tk.Label(root, text="Up Button").pack(pady=(10,0))
+
+# ---------- BUTTON BINDS ----------
 button_up_var = tk.StringVar(value=config.get("button_up"))
 button_up_var.trace_add("write", on_button_up_change)
-button_up_entry = tk.Entry(root, textvariable=button_up_var)
-button_up_entry.pack()
+add_row("Up Button", tk.Entry(settings, textvariable=button_up_var))
 
-tk.Label(root, text="Down Button").pack(pady=(10,0))
 button_down_var = tk.StringVar(value=config.get("button_down"))
 button_down_var.trace_add("write", on_button_down_change)
-button_down_entry = tk.Entry(root, textvariable=button_down_var)
-button_down_entry.pack()
+add_row("Down Button", tk.Entry(settings, textvariable=button_down_var))
 
-tk.Label(root, text="Left Button").pack(pady=(10,0))
 button_left_var = tk.StringVar(value=config.get("button_left"))
 button_left_var.trace_add("write", on_button_left_change)
-button_left_entry = tk.Entry(root, textvariable=button_left_var)
-button_left_entry.pack()
+add_row("Left Button", tk.Entry(settings, textvariable=button_left_var))
 
-tk.Label(root, text="Right Button").pack(pady=(10,0))
 button_right_var = tk.StringVar(value=config.get("button_right"))
 button_right_var.trace_add("write", on_button_right_change)
-button_right_entry = tk.Entry(root, textvariable=button_right_var)
-button_right_entry.pack()
+add_row("Right Button", tk.Entry(settings, textvariable=button_right_var))
+
 
 root.mainloop()
