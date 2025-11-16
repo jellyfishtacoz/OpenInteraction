@@ -41,10 +41,10 @@ b_overlay = BoundaryOverlay(175)
 c_overlay.hide()
 b_overlay.hide()
 
-if eye_tracking:
+if eye_tracking and config["show_overlay"] == 1:
     c_overlay.show()
 
-if head_tracking:
+if head_tracking and config["show_overlay"] == 1:
     if eye_action == "press_key_eye":
         b_overlay.show()
 
@@ -112,7 +112,7 @@ while True:
             smoothed_x, smoothed_y = smoother.step(x, y)  # feed to smoother
 
             # do action
-            active_eye_handler = (smoothed_x, smoothed_y)
+            active_eye_handler(smoothed_x, smoothed_y)
 
             # update gaze position
             c_overlay.gaze_x = int(smoothed_x)
