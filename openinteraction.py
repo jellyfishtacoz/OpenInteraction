@@ -46,14 +46,24 @@ def on_head_actions_change(val):
     config["head_action"] = str(val)
     save_config()
 
-def on_eye_bthresh_change(*args):
-    val = eye_bthresh_var.get()
-    config["eye_bthresh"] = float(val)
+def on_eye_bthresh_h_change(*args):
+    val = eye_bthresh_h_var.get()
+    config["eye_bthresh_h"] = float(val)
     save_config()
 
-def on_head_bthresh_change(*args):
-    val = head_bthresh_var.get()
-    config["head_bthresh"] = float(val)
+def on_eye_bthresh_v_change(*args):
+    val = eye_bthresh_v_var.get()
+    config["eye_bthresh_v"] = float(val)
+    save_config()
+
+def on_head_bthresh_h_change(*args):
+    val = head_bthresh_h_var.get()
+    config["head_bthresh_h"] = float(val)
+    save_config()
+
+def on_head_bthresh_v_change(*args):
+    val = head_bthresh_v_var.get()
+    config["head_bthresh_v"] = float(val)
     save_config()
 
 def on_head_mouse_range_change(*args):
@@ -162,7 +172,7 @@ def add_eye_row(label, widget):
     add_eye_row.row += 1
 add_eye_row.row = 0
 
-tk.Label(eye_frame, text="Eye Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+tk.Label(eye_frame, text="Eye Control", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
 add_eye_row.row = 1  # start rows after header
 
 # Head column
@@ -176,7 +186,7 @@ def add_head_row(label, widget):
     add_head_row.row += 1
 add_head_row.row = 0
 
-tk.Label(head_frame, text="Head Settings", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
+tk.Label(head_frame, text="Head Control", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=(0,10))
 add_head_row.row = 1  # start rows after header
 
 # ---------- Add Eye Settings ----------
@@ -185,9 +195,13 @@ eye_var = tk.StringVar(value=config.get("eye_action"))
 eye_menu = tk.OptionMenu(eye_frame, eye_var, *eye_options, command=on_eye_actions_change)
 add_eye_row("Eye Action", eye_menu)
 
-eye_bthresh_var = tk.StringVar(value=config.get("eye_bthresh"))
-eye_bthresh_var.trace_add("write", on_eye_bthresh_change)
-add_eye_row("Eye Button Threshold", tk.Entry(eye_frame, textvariable=eye_bthresh_var))
+eye_bthresh_h_var = tk.StringVar(value=config.get("eye_bthresh_h"))
+eye_bthresh_h_var.trace_add("write", on_eye_bthresh_h_change)
+add_eye_row("Eye Button Horizontal Threshold", tk.Entry(eye_frame, textvariable=eye_bthresh_h_var))
+
+eye_bthresh_v_var = tk.StringVar(value=config.get("eye_bthresh_v"))
+eye_bthresh_v_var.trace_add("write", on_eye_bthresh_v_change)
+add_eye_row("Eye Button Vertical Threshold", tk.Entry(eye_frame, textvariable=eye_bthresh_v_var))
 
 eye_overlay_radius_var = tk.StringVar(value=config.get("eye_overlay_radius"))
 eye_overlay_radius_var.trace_add("write", on_eye_overlay_radius_change)
@@ -204,9 +218,13 @@ head_var = tk.StringVar(value=config.get("head_action"))
 head_menu = tk.OptionMenu(head_frame, head_var, *head_options, command=on_head_actions_change)
 add_head_row("Head Action", head_menu)
 
-head_bthresh_var = tk.StringVar(value=config.get("head_bthresh"))
-head_bthresh_var.trace_add("write", on_head_bthresh_change)
-add_head_row("Head Button Threshold", tk.Entry(head_frame, textvariable=head_bthresh_var))
+head_bthresh_h_var = tk.StringVar(value=config.get("head_bthresh_h"))
+head_bthresh_h_var.trace_add("write", on_head_bthresh_h_change)
+add_head_row("Head Button Horizontal Threshold", tk.Entry(head_frame, textvariable=head_bthresh_h_var))
+
+head_bthresh_v_var = tk.StringVar(value=config.get("head_bthresh_v"))
+head_bthresh_v_var.trace_add("write", on_head_bthresh_v_change)
+add_head_row("Head Button Vertical Threshold", tk.Entry(head_frame, textvariable=head_bthresh_v_var))
 
 head_mouse_range_var = tk.StringVar(value=config.get("head_mouse_range"))
 head_mouse_range_var.trace_add("write", on_head_mouse_range_change)

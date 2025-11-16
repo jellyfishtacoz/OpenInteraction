@@ -1,8 +1,8 @@
 {
     "eye_action": "off",
     "head_action": "press_key_head",
-    "eye_bthresh_h": 175,
-    "eye_bthresh_v": 175,
+    "eye_bthresh_h": 175.0,
+    "eye_bthresh_v": 175.0,
     "head_bthresh_h": 0.1,
     "head_bthresh_v": 0.15,
     "head_mouse_range": 1.0,
