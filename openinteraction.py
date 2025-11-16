@@ -135,8 +135,8 @@ top_frame.pack()
 tk.Label(top_frame, text="Press for calibration").pack()
 tk.Button(top_frame, text="Start Calibration", command=start_calibration).pack()
 
-tk.Label(top_frame, text="Press for cursor", pady=10).pack()
-tk.Button(top_frame, text="Start Cursor", command=start_cursor).pack()
+tk.Label(top_frame, text="Press to Start").pack(pady = (10,0))
+tk.Button(top_frame, text="Start Interface", command=start_cursor).pack()
 
 
 # ---------- SETTINGS FRAME ----------
@@ -214,5 +214,14 @@ button_right_var = tk.StringVar(value=config.get("button_right"))
 button_right_var.trace_add("write", on_button_right_change)
 add_row("Right Button", tk.Entry(settings, textvariable=button_right_var))
 
+# ---------- FOOTER ----------
+footer = tk.Frame(root, pady=10)
+footer.pack(side="bottom", fill="x")
+
+left = tk.Label(footer, text="Press ESC to exit")
+left.pack(side="left", padx=20, anchor="w")
+
+right = tk.Label(footer, text="Press T to pause tracking")
+right.pack(side="right", padx=20, anchor="e")
 
 root.mainloop()
